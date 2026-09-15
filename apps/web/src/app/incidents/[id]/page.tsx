@@ -442,6 +442,29 @@ export default function IncidentDetailsPage() {
         </div>
       </div>
 
+      {/* TERMINAL LOGS PANEL */}
+      <div className="p-5 rounded-xl bg-slate-950 border border-slate-800 shadow-xl space-y-3 font-mono text-xs">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 rounded-full bg-red-500" />
+            <div className="w-3 h-3 rounded-full bg-amber-500" />
+            <div className="w-3 h-3 rounded-full bg-emerald-500" />
+            <span className="text-slate-400 font-bold ml-2">payment-api-stdout.log</span>
+          </div>
+          <span className="text-[10px] text-slate-500 uppercase tracking-wider">Production Pod Terminal</span>
+        </div>
+
+        <div className="space-y-1 text-[11px] leading-relaxed max-h-48 overflow-y-auto p-2 bg-black/60 rounded-lg">
+          <p className="text-slate-400"><span className="text-slate-600">14:30:12</span> <span className="text-emerald-400 font-bold">INFO</span> Deployment v2.8.4 initialized on payment-api-pod-7f9x2</p>
+          <p className="text-slate-400"><span className="text-slate-600">14:31:58</span> <span className="text-emerald-400 font-bold">INFO</span> Payment checkout request started - TxID: 8f9b20a1</p>
+          <p className="text-slate-400"><span className="text-slate-600">14:32:04</span> <span className="text-red-400 font-bold">ERROR</span> Database connection timeout after 5000ms [Postgres: pg_pool_exhausted]</p>
+          <p className="text-slate-400"><span className="text-slate-600">14:32:07</span> <span className="text-red-400 font-bold">ERROR</span> Failed to acquire database connection from pool (max_connections=50 reached)</p>
+          <p className="text-slate-400"><span className="text-slate-600">14:32:15</span> <span className="text-amber-400 font-bold">WARN</span> PgBouncer connection pool utilization reached 96% threshold</p>
+          <p className="text-slate-400"><span className="text-slate-600">14:32:28</span> <span className="text-red-400 font-bold">ERROR</span> Payment request failed with HTTP 500 InternalServerError - ClientAborted</p>
+          <p className="text-slate-400"><span className="text-slate-600">14:33:01</span> <span className="text-purple-400 font-bold">CRIT</span> Datadog Webhook trigger sent: ALERT-1001 Error Rate 18.7% &gt; 5%</p>
+        </div>
+      </div>
+
       {/* SECTION 4 & 5: TIMELINE & CORRELATED ALERTS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* TIMELINE */}

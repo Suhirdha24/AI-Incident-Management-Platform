@@ -21,7 +21,7 @@ export function Topbar() {
     if (pathname === '/admin/users') return 'User & RBAC Management';
     if (pathname === '/admin/alert-sources') return 'Monitoring Sources';
     if (pathname === '/admin/audit-logs') return 'System Audit Logs';
-    return 'IncidentPulse Console';
+    return 'PulseOps Console';
   };
 
   const notifications = [
@@ -53,7 +53,7 @@ export function Topbar() {
       {/* Title & Breadcrumb */}
       <div>
         <div className="flex items-center space-x-2 text-xs text-slate-400 dark:text-slate-500 font-medium">
-          <span>IncidentPulse AI</span>
+          <span>PulseOps AI</span>
           <span>/</span>
           <span className="capitalize">{pathname.split('/')[1] || 'Dashboard'}</span>
         </div>

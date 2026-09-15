@@ -18,7 +18,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     return (
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center space-y-4">
         <div className="w-10 h-10 border-4 border-sky-500/30 border-t-sky-500 rounded-full animate-spin" />
-        <p className="text-xs font-mono text-slate-400">Loading OpsAI Platform...</p>
+        <p className="text-xs font-mono text-slate-400">Loading IncidentPulse Platform...</p>
       </div>
     );
   }

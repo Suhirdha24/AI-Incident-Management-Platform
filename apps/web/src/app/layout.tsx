@@ -4,7 +4,7 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { Toaster } from 'sonner';
 
 export const metadata = {
-  title: 'OpsAI — AI-Powered Incident Intelligence',
+  title: 'IncidentPulse AI — AI-Powered Incident Intelligence',
   description: 'Production Incident Management Platform for Engineering & DevOps teams'
 };
 

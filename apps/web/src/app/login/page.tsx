@@ -51,7 +51,7 @@ export default function LoginPage() {
             <Cpu className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-white">OpsAI</h1>
+            <h1 className="text-xl font-bold tracking-tight text-white">IncidentPulse AI</h1>
             <p className="text-xs text-sky-400 font-medium">AI-Powered Incident Intelligence</p>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function LoginPage() {
 
         {/* Footer info */}
         <div className="relative z-10 text-xs text-slate-500 flex items-center justify-between">
-          <span>&copy; 2026 OpsAI Incident Intelligence Platform</span>
+          <span>&copy; 2026 IncidentPulse AI Platform</span>
           <span className="flex items-center gap-1">
             <ShieldCheck className="w-4 h-4 text-emerald-500" /> SOC2 Type II Certified
           </span>
@@ -119,7 +119,7 @@ export default function LoginPage() {
       <div className="flex flex-col justify-center items-center p-6 sm:p-12 bg-slate-950">
         <div className="w-full max-w-md space-y-8">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight text-white">Sign in to OpsAI Console</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-white">Sign in to IncidentPulse Console</h2>
             <p className="text-xs text-slate-400 mt-1">Enter your credentials or choose a quick demo role persona.</p>
           </div>
 

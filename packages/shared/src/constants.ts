@@ -1,0 +1,70 @@
+export enum UserRole {
+  ENGINEER = 'ENGINEER',
+  INCIDENT_MANAGER = 'INCIDENT_MANAGER',
+  ADMIN = 'ADMIN'
+}
+
+export enum IncidentSeverity {
+  SEV_1 = 'SEV-1',
+  SEV_2 = 'SEV-2',
+  SEV_3 = 'SEV-3',
+  SEV_4 = 'SEV-4'
+}
+
+export enum IncidentStatus {
+  DETECTED = 'DETECTED',
+  ACKNOWLEDGED = 'ACKNOWLEDGED',
+  INVESTIGATING = 'INVESTIGATING',
+  MITIGATING = 'MITIGATING',
+  RESOLVED = 'RESOLVED',
+  CLOSED = 'CLOSED'
+}
+
+export enum AlertSeverity {
+  CRITICAL = 'CRITICAL',
+  HIGH = 'HIGH',
+  MEDIUM = 'MEDIUM',
+  LOW = 'LOW'
+}
+
+export enum AlertStatus {
+  TRIGGERED = 'TRIGGERED',
+  ACKNOWLEDGED = 'ACKNOWLEDGED',
+  RESOLVED = 'RESOLVED'
+}
+
+export enum ServiceStatus {
+  HEALTHY = 'HEALTHY',
+  DEGRADED = 'DEGRADED',
+  CRITICAL = 'CRITICAL'
+}
+
+export enum PostmortemStatus {
+  DRAFT = 'DRAFT',
+  PUBLISHED = 'PUBLISHED'
+}
+
+export enum AuditAction {
+  LOGIN = 'LOGIN',
+  LOGOUT = 'LOGOUT',
+  ALERT_CREATED = 'ALERT_CREATED',
+  INCIDENT_CREATED = 'INCIDENT_CREATED',
+  INCIDENT_ASSIGNED = 'INCIDENT_ASSIGNED',
+  SEVERITY_CHANGED = 'SEVERITY_CHANGED',
+  STATUS_CHANGED = 'STATUS_CHANGED',
+  AI_ANALYSIS_STARTED = 'AI_ANALYSIS_STARTED',
+  AI_ANALYSIS_COMPLETED = 'AI_ANALYSIS_COMPLETED',
+  AI_ANALYSIS_FAILED = 'AI_ANALYSIS_FAILED',
+  COMMENT_CREATED = 'COMMENT_CREATED',
+  INCIDENT_RESOLVED = 'INCIDENT_RESOLVED',
+  POSTMORTEM_GENERATED = 'POSTMORTEM_GENERATED'
+}
+
+export const VALID_STATUS_TRANSITIONS: Record<IncidentStatus, IncidentStatus[]> = {
+  [IncidentStatus.DETECTED]: [IncidentStatus.ACKNOWLEDGED],
+  [IncidentStatus.ACKNOWLEDGED]: [IncidentStatus.INVESTIGATING],
+  [IncidentStatus.INVESTIGATING]: [IncidentStatus.MITIGATING],
+  [IncidentStatus.MITIGATING]: [IncidentStatus.RESOLVED],
+  [IncidentStatus.RESOLVED]: [IncidentStatus.CLOSED],
+  [IncidentStatus.CLOSED]: []
+};

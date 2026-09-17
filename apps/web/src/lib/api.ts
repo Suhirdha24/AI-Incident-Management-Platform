@@ -1,5 +1,5 @@
-const API_BASE_URL = typeof window !== 'undefined'
-  ? (process.env.NEXT_PUBLIC_API_URL || '')
+const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL && process.env.NEXT_PUBLIC_API_URL.trim())
+  ? process.env.NEXT_PUBLIC_API_URL.trim()
   : 'http://localhost:5000';
 
 export async function fetchApi<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
@@ -14,15 +14,30 @@ export async function fetchApi<T = any>(endpoint: string, options: RequestInit =
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const res = await fetch(`${API_BASE_URL}/api${endpoint}`, {
-    ...options,
-    headers
-  });
+  // Abort controller for 8 second timeout to prevent infinite hanging UI
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 8000);
 
-  const data = await res.json();
-  if (!res.ok || data.success === false) {
-    throw new Error(data.error?.message || 'API request failed');
+  try {
+    const res = await fetch(`${API_BASE_URL}/api${endpoint}`, {
+      ...options,
+      headers,
+      signal: controller.signal
+    });
+
+    const data = await res.json();
+    if (!res.ok || data.success === false) {
+      throw new Error(data.error?.message || 'API request failed');
+    }
+
+    return data.data;
+  } catch (err: any) {
+    if (err.name === 'AbortError') {
+      throw new Error('Server connection timeout. Please ensure API backend is running on port 5000.');
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  return data.data;
 }
+

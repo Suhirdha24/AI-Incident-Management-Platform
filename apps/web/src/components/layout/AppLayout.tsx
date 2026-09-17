@@ -16,15 +16,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center space-y-4">
-        <div className="w-10 h-10 border-4 border-sky-500/30 border-t-sky-500 rounded-full animate-spin" />
-        <p className="text-xs font-mono text-slate-400">Loading IncidentPulse Platform...</p>
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center space-y-3 font-sans selection:bg-zinc-800">
+        <div className="w-8 h-8 border-2 border-zinc-800 border-t-zinc-200 rounded-full animate-spin" />
+        <p className="text-xs font-mono text-zinc-500">Connecting to IncidentPulse Platform...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex bg-slate-50 dark:bg-[#090d16] text-slate-900 dark:text-slate-100">
+    <div className="min-h-screen flex bg-zinc-950 text-zinc-100 font-sans">
       <Sidebar />
       <div className="flex-1 flex flex-col min-w-0">
         <Topbar />
@@ -35,3 +35,4 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+

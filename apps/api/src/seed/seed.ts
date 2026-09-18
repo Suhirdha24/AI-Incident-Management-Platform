@@ -14,9 +14,26 @@ import { Postmortem } from '../models/Postmortem';
 import { Notification } from '../models/Notification';
 import { UserRole, IncidentSeverity, IncidentStatus, AlertSeverity, AlertStatus, ServiceStatus, PostmortemStatus, AuditAction } from '@opsai/shared';
 
+import dns from 'dns';
+
+try {
+  dns.setServers(['8.8.8.8', '1.1.1.1']);
+} catch (e) {
+  // ignore
+}
+
 async function seed() {
-  console.log('Connecting to MongoDB for seeding...');
-  await mongoose.connect(config.mongoUri);
+  console.log(`Connecting to MongoDB at ${config.mongoUri} for seeding...`);
+  try {
+    await mongoose.connect(config.mongoUri);
+    console.log('Connected to primary MongoDB.');
+  } catch (err: any) {
+    console.warn(`Primary MongoDB connection failed: ${err.message}`);
+    const fallbackUri = 'mongodb://127.0.0.1:27017/opsai';
+    console.log(`Attempting fallback connection to local MongoDB at ${fallbackUri}...`);
+    await mongoose.connect(fallbackUri);
+    console.log('Connected to local fallback MongoDB.');
+  }
 
   console.log('Clearing existing database collections...');
   await Promise.all([

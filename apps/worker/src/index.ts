@@ -9,8 +9,16 @@ import './models';
 async function startWorker() {
   try {
     logger.info(`Connecting to MongoDB at ${config.mongoUri}...`);
-    await mongoose.connect(config.mongoUri);
-    logger.info('Worker connected to MongoDB successfully.');
+    try {
+      await mongoose.connect(config.mongoUri);
+      logger.info('Worker connected to primary MongoDB successfully.');
+    } catch (err: any) {
+      logger.warn(`Worker failed to connect to primary MongoDB: ${err.message}`);
+      const fallbackUri = 'mongodb://127.0.0.1:27017/opsai';
+      logger.info(`Attempting worker fallback connection to local MongoDB at ${fallbackUri}...`);
+      await mongoose.connect(fallbackUri);
+      logger.info('Worker connected to local fallback MongoDB successfully.');
+    }
 
     const connection = {
       host: config.redisHost,

@@ -66,6 +66,51 @@ export default function IncidentDetailsPage() {
   const [aiChatHistory, setAiChatHistory] = useState<Array<{ q: string; a: string }>>([]);
   const [aiAsking, setAiAsking] = useState(false);
 
+  // Assign modal state
+  const [users, setUsers] = useState<any[]>([]);
+  const [selectedEngineerId, setSelectedEngineerId] = useState('');
+  const [assignLoading, setAssignLoading] = useState(false);
+
+  const loadUsers = async () => {
+    try {
+      const res = await fetchApi('/admin/users');
+      setUsers(res || []);
+    } catch (err) {
+      console.error('Failed to load users:', err);
+    }
+  };
+
+  const handleAssignEngineer = async (engineerIdToAssign: string) => {
+    if (!engineerIdToAssign) return;
+    setAssignLoading(true);
+    try {
+      await fetchApi(`/incidents/${id}/assign`, {
+        method: 'POST',
+        body: JSON.stringify({ engineerId: engineerIdToAssign })
+      });
+      toast.success('Engineer assigned successfully');
+      setShowAssignModal(false);
+      loadIncidentData();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to assign engineer');
+    } finally {
+      setAssignLoading(false);
+    }
+  };
+
+  const handleSeverityChange = async (newSev: string) => {
+    try {
+      await fetchApi(`/incidents/${id}/severity`, {
+        method: 'PATCH',
+        body: JSON.stringify({ severity: newSev })
+      });
+      toast.success(`Severity updated to ${newSev}`);
+      loadIncidentData();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to update severity');
+    }
+  };
+
   const loadIncidentData = async () => {
     try {
       const res = await fetchApi(`/incidents/${id}`);
@@ -79,6 +124,7 @@ export default function IncidentDetailsPage() {
 
   useEffect(() => {
     loadIncidentData();
+    loadUsers();
 
     // Socket.IO real-time updates
     const socket = getSocket();
@@ -241,11 +287,16 @@ export default function IncidentDetailsPage() {
             <span className="text-xs font-mono font-semibold text-zinc-100 bg-zinc-800 px-2.5 py-0.5 rounded border border-zinc-700">
               {incident?.incidentId || 'INC-2026-0192'}
             </span>
-            <span className={`px-2.5 py-0.5 rounded text-xs font-mono font-semibold border ${
-              incident?.severity === 'SEV-1' ? 'bg-red-500/10 text-red-400 border-red-500/20' : 'bg-amber-500/10 text-amber-400 border-amber-500/20'
-            }`}>
-              {incident?.severity || 'SEV-1'}
-            </span>
+            <select
+              value={incident?.severity || 'SEV-1'}
+              onChange={e => handleSeverityChange(e.target.value)}
+              className="bg-zinc-950 border border-zinc-700 text-xs font-mono font-semibold rounded px-2 py-0.5 text-zinc-200 focus:outline-none"
+            >
+              <option value="SEV-1">SEV-1 Critical</option>
+              <option value="SEV-2">SEV-2 High</option>
+              <option value="SEV-3">SEV-3 Medium</option>
+              <option value="SEV-4">SEV-4 Low</option>
+            </select>
             <span className="px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 uppercase">
               {incident?.status || 'INVESTIGATING'}
             </span>
@@ -255,20 +306,54 @@ export default function IncidentDetailsPage() {
           </h1>
         </div>
 
-        {/* Action Buttons Toolbar */}
+        {/* State-Machine Aware Action Buttons Toolbar */}
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            onClick={() => handleStatusChange('ACKNOWLEDGED')}
-            className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 transition-colors border border-zinc-700/60"
-          >
-            Acknowledge
-          </button>
-          <button
-            onClick={() => handleStatusChange('MITIGATING')}
-            className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-200 transition-colors border border-zinc-700/60"
-          >
-            Mark Mitigating
-          </button>
+          {incident?.status === 'DETECTED' && (
+            <button
+              onClick={() => handleStatusChange('ACKNOWLEDGED')}
+              className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors shadow-sm"
+            >
+              Acknowledge
+            </button>
+          )}
+
+          {incident?.status === 'ACKNOWLEDGED' && (
+            <button
+              onClick={() => handleStatusChange('INVESTIGATING')}
+              className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-xs font-semibold text-white transition-colors shadow-sm"
+            >
+              Start Investigation
+            </button>
+          )}
+
+          {incident?.status === 'INVESTIGATING' && (
+            <button
+              onClick={() => handleStatusChange('MITIGATING')}
+              className="px-3 py-1.5 rounded-lg bg-orange-600 hover:bg-orange-500 text-xs font-semibold text-white transition-colors shadow-sm"
+            >
+              Mark Mitigating
+            </button>
+          )}
+
+          {incident?.status === 'MITIGATING' && (
+            <button
+              onClick={() => setShowResolveModal(true)}
+              className="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5" />
+              Resolve Incident
+            </button>
+          )}
+
+          {incident?.status === 'RESOLVED' && (
+            <button
+              onClick={() => handleStatusChange('CLOSED')}
+              className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold text-zinc-200 transition-colors border border-zinc-700/60"
+            >
+              Close Record
+            </button>
+          )}
+
           <button
             onClick={handleTriggerAI}
             disabled={analyzing}
@@ -276,13 +361,6 @@ export default function IncidentDetailsPage() {
           >
             <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
             {analyzing ? 'Analyzing...' : 'Analyze with AI'}
-          </button>
-          <button
-            onClick={() => setShowResolveModal(true)}
-            className="px-3.5 py-1.5 rounded-lg bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-semibold flex items-center gap-1.5 transition-colors shadow-sm"
-          >
-            <CheckCircle2 className="w-3.5 h-3.5 text-zinc-950" />
-            Resolve Incident
           </button>
         </div>
       </div>
@@ -299,15 +377,23 @@ export default function IncidentDetailsPage() {
         </div>
         <div>
           <span className="text-[10px] text-zinc-500 font-mono uppercase block">Assigned Engineer</span>
-          <span className="text-zinc-200 font-medium mt-0.5 block">{incident?.assignedEngineerId?.name || 'Vishal (DevOps)'}</span>
+          <div className="flex items-center space-x-1.5 mt-0.5">
+            <span className="text-zinc-200 font-medium">{incident?.assignedEngineerId?.name || 'Unassigned'}</span>
+            <button
+              onClick={() => setShowAssignModal(true)}
+              className="text-[10px] font-mono text-sky-400 hover:underline font-semibold"
+            >
+              [Assign]
+            </button>
+          </div>
         </div>
         <div>
           <span className="text-[10px] text-zinc-500 font-mono uppercase block">Observed Impact</span>
-          <span className="text-red-400 font-medium mt-0.5 block">12,483 requests affected</span>
+          <span className="text-red-400 font-medium mt-0.5 block">{incident?.impactSummary || '12,483 requests affected'}</span>
         </div>
         <div>
           <span className="text-[10px] text-zinc-500 font-mono uppercase block">Active Duration</span>
-          <span className="text-zinc-100 font-mono mt-0.5 block">32m 14s</span>
+          <span className="text-zinc-100 font-mono mt-0.5 block">{incident?.durationMinutes ? `${incident.durationMinutes}m` : '32m 14s'}</span>
         </div>
       </div>
 
@@ -752,6 +838,52 @@ export default function IncidentDetailsPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* ASSIGN ENGINEER MODAL */}
+      {showAssignModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-zinc-900 border border-zinc-800 rounded-xl w-full max-w-md p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
+              <h2 className="text-base font-semibold text-zinc-100">Assign Lead Engineer</h2>
+              <button onClick={() => setShowAssignModal(false)} className="text-zinc-400 hover:text-zinc-200">✕</button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <label className="font-medium text-zinc-300 block">Select Team Member</label>
+              <select
+                value={selectedEngineerId}
+                onChange={e => setSelectedEngineerId(e.target.value)}
+                className="w-full bg-zinc-950 border border-zinc-800 text-zinc-100 p-2.5 rounded-lg focus:outline-none focus:border-zinc-500"
+              >
+                <option value="">-- Choose Engineer or Manager --</option>
+                {users.map(u => (
+                  <option key={u._id} value={u._id}>
+                    {u.name} ({u.role}) - {u.email}
+                  </option>
+                ))}
+              </select>
+
+              <div className="flex items-center justify-end space-x-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAssignModal(false)}
+                  className="px-4 py-2 rounded-lg text-zinc-400 hover:text-zinc-200 font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={!selectedEngineerId || assignLoading}
+                  onClick={() => handleAssignEngineer(selectedEngineerId)}
+                  className="px-4 py-2 rounded-lg bg-white text-zinc-950 font-semibold shadow-sm hover:bg-zinc-200 transition-colors disabled:opacity-50"
+                >
+                  {assignLoading ? 'Assigning...' : 'Assign Lead'}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

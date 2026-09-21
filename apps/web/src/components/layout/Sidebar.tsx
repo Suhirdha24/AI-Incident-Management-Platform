@@ -143,7 +143,7 @@ export function Sidebar() {
                 className="w-6 h-6 rounded-full border border-neutral-300 dark:border-neutral-700 object-cover shrink-0"
               />
               <div className="truncate">
-                <p className="text-xs font-semibold text-neutral-900 dark:text-neutral-100 truncate">{user.name.split(' ')[0]}</p>
+                <p className="text-xs font-semibold text-neutral-900 dark:text-neutral-100 truncate">{user.name ? user.name.split(' ')[0] : 'User'}</p>
                 <p className="text-[9px] text-neutral-500 font-mono uppercase">{user.role}</p>
               </div>
             </div>

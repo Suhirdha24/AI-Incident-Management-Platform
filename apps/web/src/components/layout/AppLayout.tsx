@@ -8,10 +8,10 @@ import { usePathname } from 'next/navigation';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
 
   // Standalone full-screen pages (Landing, Login, Register)
-  if (pathname === '/login' || pathname === '/register' || pathname === '/') {
+  if (!pathname || pathname === '/' || pathname.startsWith('/login') || pathname.startsWith('/register')) {
     return <>{children}</>;
   }
 

@@ -119,7 +119,7 @@ export function Topbar() {
               className="w-6 h-6 rounded-full border border-neutral-300 dark:border-neutral-700 object-cover"
             />
             <span className="text-xs font-semibold text-neutral-800 dark:text-neutral-200 hidden sm:inline-block">
-              {user.name.split(' ')[0]}
+              {user.name ? user.name.split(' ')[0] : 'User'}
             </span>
           </div>
         )}

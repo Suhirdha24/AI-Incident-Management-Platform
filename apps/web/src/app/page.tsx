@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/authContext';
 import {
   Activity,
@@ -24,7 +25,18 @@ import {
 } from 'lucide-react';
 
 export default function LandingPage() {
-  const { user, theme, toggleTheme } = useAuth();
+  const { user, loading, theme, toggleTheme } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading) {
+      if (user) {
+        router.push('/dashboard');
+      } else {
+        router.push('/login');
+      }
+    }
+  }, [user, loading, router]);
 
   return (
     <div className="min-h-screen bg-warm-50 dark:bg-dark-bg text-neutral-900 dark:text-neutral-100 font-sans selection:bg-terracotta-500/20 selection:text-terracotta-600 transition-colors">

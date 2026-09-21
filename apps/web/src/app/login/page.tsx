@@ -228,11 +228,12 @@ export default function LoginPage() {
           </form>
 
           <p className="text-xs text-center text-neutral-500">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <a href="/register" className="text-terracotta-500 hover:underline font-medium">
               Create Account
             </a>
           </p>
+
 
           {/* DEMO ACCOUNTS ACCELERATOR */}
           <div className="pt-6 border-t border-neutral-200 space-y-3">

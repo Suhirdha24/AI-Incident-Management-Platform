@@ -1,13 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useAuth } from '@/lib/authContext';
 import { UserRole } from '@opsai/shared';
-import { ShieldCheck, ArrowRight, Lock, Mail, CheckCircle2, Zap } from 'lucide-react';
+import { ShieldCheck, ArrowRight, Lock, Mail, CheckCircle2, Zap, LogOut, LayoutDashboard } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function LoginPage() {
-  const { login, demoLogin } = useAuth();
+  const { user, login, demoLogin, logout } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -56,7 +57,7 @@ export default function LoginPage() {
             <div className="flex items-center space-x-2">
               <span className="font-semibold text-sm text-neutral-900 tracking-tight">OpsAI</span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-neutral-200/70 text-neutral-600 border border-neutral-300">
-                v2.4.0
+                v2.8.0
               </span>
             </div>
           </div>
@@ -155,6 +156,41 @@ export default function LoginPage() {
             <span className="font-semibold text-base text-neutral-900 tracking-tight">OpsAI</span>
           </div>
 
+          {/* ACTIVE SESSION NOTIFICATION BANNER */}
+          {user && (
+            <div className="p-3.5 rounded bg-emerald-50 border border-emerald-200 text-xs space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-emerald-900 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  Currently Signed In
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-semibold uppercase">
+                  {user.role}
+                </span>
+              </div>
+              <p className="text-neutral-700 text-[11px]">
+                Signed in as <strong>{user.name}</strong> ({user.email}).
+              </p>
+              <div className="flex items-center space-x-2 pt-1">
+                <Link
+                  href="/dashboard"
+                  className="px-3 py-1.5 rounded bg-terracotta-500 hover:bg-terracotta-600 text-white font-medium text-[11px] flex items-center gap-1 transition-colors shadow-sm"
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5" />
+                  <span>Go to Console</span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="px-3 py-1.5 rounded border border-neutral-300 bg-white text-neutral-700 hover:bg-neutral-100 font-medium text-[11px] flex items-center gap-1 transition-colors"
+                >
+                  <LogOut className="w-3.5 h-3.5 text-neutral-500" />
+                  <span>Sign Out</span>
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* TAB HEADER */}
           <div className="flex rounded bg-[#F7F5F1] border border-neutral-200 p-1">
             <button
@@ -163,12 +199,12 @@ export default function LoginPage() {
             >
               Sign In
             </button>
-            <a
+            <Link
               href="/register"
               className="flex-1 py-1.5 text-center text-xs font-medium rounded text-neutral-500 hover:text-neutral-900 transition-colors"
             >
               Create Account
-            </a>
+            </Link>
           </div>
 
           <div>
@@ -195,7 +231,7 @@ export default function LoginPage() {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-xs font-medium text-neutral-700">Password</label>
-                <a href="#" className="text-xs text-neutral-500 hover:text-neutral-800 transition-colors">Forgot password?</a>
+                <span className="text-xs text-neutral-400 cursor-not-allowed">Forgot password?</span>
               </div>
               <div className="relative">
                 <Lock className="w-4 h-4 text-neutral-400 absolute left-3 top-2.5" />
@@ -212,7 +248,7 @@ export default function LoginPage() {
 
             <div className="flex items-center justify-between text-xs pt-1">
               <label className="flex items-center space-x-2 text-neutral-600 cursor-pointer">
-                <input type="checkbox" className="rounded bg-neutral-100 border-neutral-300 text-terracotta-500 focus:ring-0 accent-terracotta-500" />
+                <input type="checkbox" defaultChecked className="rounded bg-neutral-100 border-neutral-300 text-terracotta-500 focus:ring-0 accent-terracotta-500" />
                 <span>Remember session</span>
               </label>
             </div>
@@ -229,11 +265,10 @@ export default function LoginPage() {
 
           <p className="text-xs text-center text-neutral-500">
             Don&apos;t have an account?{' '}
-            <a href="/register" className="text-terracotta-500 hover:underline font-medium">
+            <Link href="/register" className="text-terracotta-500 hover:underline font-medium">
               Create Account
-            </a>
+            </Link>
           </p>
-
 
           {/* DEMO ACCOUNTS ACCELERATOR */}
           <div className="pt-6 border-t border-neutral-200 space-y-3">
@@ -286,5 +321,3 @@ export default function LoginPage() {
     </div>
   );
 }
-
-

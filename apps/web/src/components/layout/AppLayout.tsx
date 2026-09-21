@@ -10,8 +10,8 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const pathname = usePathname();
 
-  // Standalone full-screen pages (Landing & Login)
-  if (pathname === '/login' || pathname === '/') {
+  // Standalone full-screen pages (Landing, Login, Register)
+  if (pathname === '/login' || pathname === '/register' || pathname === '/') {
     return <>{children}</>;
   }
 

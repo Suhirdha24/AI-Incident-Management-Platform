@@ -343,25 +343,33 @@ export default function DashboardPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
-                  <tr className="hover:bg-neutral-50 dark:hover:bg-neutral-900/50 cursor-pointer transition-colors">
-                    <td className="py-3 font-mono font-semibold text-terracotta-500">
-                      <Link href="/incidents/INC-2026-0192">INC-2026-0192</Link>
-                    </td>
-                    <td className="py-3 font-medium text-neutral-900 dark:text-neutral-100">
-                      Payment API experiencing elevated error rates
-                    </td>
-                    <td className="py-3">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
-                        SEV-1
-                      </span>
-                    </td>
-                    <td className="py-3">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                        INVESTIGATING
-                      </span>
-                    </td>
-                    <td className="py-3 text-neutral-400 font-mono">32m</td>
-                  </tr>
+                  {(data?.recentIncidents && data.recentIncidents.length > 0 ? data.recentIncidents : [
+                    { _id: 'INC-2026-0192', incidentId: 'INC-2026-0192', title: 'Payment API experiencing elevated error rates', severity: 'SEV-1', status: 'INVESTIGATING', durationMinutes: 32 }
+                  ]).map((inc: any) => (
+                    <tr key={inc._id || inc.incidentId} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/50 cursor-pointer transition-colors">
+                      <td className="py-3 font-mono font-semibold text-terracotta-500">
+                        <Link href={`/incidents/${inc._id || inc.incidentId}`}>{inc.incidentId}</Link>
+                      </td>
+                      <td className="py-3 font-medium text-neutral-900 dark:text-neutral-100">
+                        {inc.title}
+                      </td>
+                      <td className="py-3">
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold border ${
+                          inc.severity === 'SEV-1' ? 'bg-rose-500/10 text-rose-500 border-rose-500/20' : 'bg-orange-500/10 text-orange-500 border-orange-500/20'
+                        }`}>
+                          {inc.severity}
+                        </span>
+                      </td>
+                      <td className="py-3">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                          {inc.status}
+                        </span>
+                      </td>
+                      <td className="py-3 text-neutral-500 dark:text-neutral-400 font-mono">
+                        {inc.durationMinutes ? `${inc.durationMinutes}m` : '32m'}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>

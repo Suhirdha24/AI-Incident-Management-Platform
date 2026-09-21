@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { fetchApi } from '@/lib/api';
+import { safeFormatDate } from '@/lib/dateUtils';
 import { History, ShieldCheck, Lock, FileText, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -64,7 +65,7 @@ export default function AuditLogsPage() {
                 logs.map(log => (
                   <tr key={log._id || log.timestamp} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/40 transition-colors">
                     <td className="py-3.5 px-4 text-neutral-400 whitespace-nowrap">
-                      {new Date(log.timestamp).toLocaleString()}
+                      {safeFormatDate(log.timestamp)}
                     </td>
                     <td className="py-3.5 px-4 font-semibold text-neutral-900 dark:text-neutral-100">
                       {log.userName || 'System'}

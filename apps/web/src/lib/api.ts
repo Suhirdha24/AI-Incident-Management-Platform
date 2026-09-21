@@ -25,7 +25,10 @@ export async function fetchApi<T = any>(endpoint: string, options: RequestInit =
       signal: controller.signal
     });
 
-    const data = await res.json();
+    const data = await res.json().catch(() => ({}));
+    if (res.status === 401 && typeof window !== 'undefined') {
+      localStorage.removeItem('opsai_token');
+    }
     if (!res.ok || data.success === false) {
       throw new Error(data.error?.message || 'API request failed');
     }

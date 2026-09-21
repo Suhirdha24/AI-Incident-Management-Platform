@@ -62,12 +62,30 @@ export async function getIncidents(req: Request, res: Response, next: NextFuncti
   }
 }
 
+async function findIncidentByAnyId(idOrNumber: string) {
+  if (idOrNumber.match(/^[0-9a-fA-F]{24}$/)) {
+    const inc = await Incident.findById(idOrNumber);
+    if (inc) return inc;
+  }
+  return await Incident.findOne({ incidentId: idOrNumber });
+}
+
 export async function getIncidentById(req: Request, res: Response, next: NextFunction) {
   try {
-    const incident = await Incident.findById(req.params.id)
-      .populate('serviceId')
-      .populate('assignedEngineerId', 'name email avatar role')
-      .populate('resolution.resolvedBy', 'name email');
+    const idOrNumber = req.params.id;
+    let incident;
+    if (idOrNumber.match(/^[0-9a-fA-F]{24}$/)) {
+      incident = await Incident.findById(idOrNumber)
+        .populate('serviceId')
+        .populate('assignedEngineerId', 'name email avatar role')
+        .populate('resolution.resolvedBy', 'name email');
+    }
+    if (!incident) {
+      incident = await Incident.findOne({ incidentId: idOrNumber })
+        .populate('serviceId')
+        .populate('assignedEngineerId', 'name email avatar role')
+        .populate('resolution.resolvedBy', 'name email');
+    }
 
     if (!incident) {
       return res.status(404).json({
@@ -85,9 +103,10 @@ export async function getIncidentById(req: Request, res: Response, next: NextFun
     }).sort({ timestamp: -1 });
 
     // Recent Deployments (around incident start)
+    const createdAtMs = incident.createdAt ? new Date(incident.createdAt).getTime() : Date.now();
     const recentDeployments = await Deployment.find({
       serviceId: incident.serviceId,
-      deployedAt: { $lte: new Date(incident.createdAt.getTime() + 30 * 60 * 1000) }
+      deployedAt: { $lte: new Date(createdAtMs + 30 * 60 * 1000) }
     }).sort({ deployedAt: -1 }).limit(3);
 
     // Seeded/Real Metrics
@@ -200,7 +219,7 @@ export async function createIncident(req: AuthenticatedRequest, res: Response, n
 export async function assignEngineer(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
     const { engineerId } = req.body;
-    const incident = await Incident.findById(req.params.id);
+    const incident = await findIncidentByAnyId(req.params.id);
     if (!incident) {
       return res.status(404).json({
         success: false,
@@ -253,7 +272,7 @@ export async function assignEngineer(req: AuthenticatedRequest, res: Response, n
 export async function updateStatus(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
     const { status: targetStatus } = req.body;
-    const incident = await Incident.findById(req.params.id);
+    const incident = await findIncidentByAnyId(req.params.id);
     if (!incident) {
       return res.status(404).json({
         success: false,
@@ -304,7 +323,7 @@ export async function updateStatus(req: AuthenticatedRequest, res: Response, nex
 export async function updateSeverity(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
     const { severity: newSeverity } = req.body;
-    const incident = await Incident.findById(req.params.id);
+    const incident = await findIncidentByAnyId(req.params.id);
     if (!incident) {
       return res.status(404).json({
         success: false,
@@ -346,7 +365,7 @@ export async function updateSeverity(req: AuthenticatedRequest, res: Response, n
 
 export async function triggerAIAnalysis(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
-    const incident = await Incident.findById(req.params.id);
+    const incident = await findIncidentByAnyId(req.params.id);
     if (!incident) {
       return res.status(404).json({
         success: false,
@@ -379,7 +398,7 @@ export async function triggerAIAnalysis(req: AuthenticatedRequest, res: Response
 export async function addComment(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
     const { text, isNote } = req.body;
-    const incident = await Incident.findById(req.params.id);
+    const incident = await findIncidentByAnyId(req.params.id);
     if (!incident) {
       return res.status(404).json({
         success: false,
@@ -418,7 +437,7 @@ export async function addComment(req: AuthenticatedRequest, res: Response, next:
 export async function resolveIncident(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
     const { rootCause, resolutionSummary, actionsTaken, impact } = req.body;
-    const incident = await Incident.findById(req.params.id);
+    const incident = await findIncidentByAnyId(req.params.id);
     if (!incident) {
       return res.status(404).json({
         success: false,
@@ -490,7 +509,10 @@ export async function resolveIncident(req: AuthenticatedRequest, res: Response, 
 export async function askAIQuestion(req: AuthenticatedRequest, res: Response, next: NextFunction) {
   try {
     const { question } = req.body;
-    const incident = await Incident.findById(req.params.id).populate('serviceId');
+    const incident = await findIncidentByAnyId(req.params.id);
+    if (incident && incident.serviceId && typeof incident.serviceId === 'object' && 'name' in incident.serviceId === false) {
+      await incident.populate('serviceId');
+    }
     if (!incident) {
       return res.status(404).json({
         success: false,

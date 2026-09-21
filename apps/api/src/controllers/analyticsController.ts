@@ -51,6 +51,12 @@ export async function getIncidentAnalytics(req: Request, res: Response, next: Ne
       status: s.status
     }));
 
+    // Recent active incidents for dashboard
+    const recentIncidents = await Incident.find()
+      .populate('serviceId', 'name')
+      .sort({ createdAt: -1 })
+      .limit(5);
+
     res.json({
       success: true,
       data: {
@@ -70,7 +76,8 @@ export async function getIncidentAnalytics(req: Request, res: Response, next: Ne
           { name: 'SEV-4 Low', value: sev4Count || 2, color: '#3b82f6' }
         ],
         trend: trendDays,
-        incidentsByService
+        incidentsByService,
+        recentIncidents
       }
     });
   } catch (err) {

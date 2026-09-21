@@ -36,14 +36,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
   useEffect(() => {
-    // Theme initialization
-    const savedTheme = (localStorage.getItem('opsai_theme') as 'dark' | 'light') || 'dark';
+    // Theme initialization (Default Light Mode as per user request)
+    const savedTheme = (localStorage.getItem('opsai_theme') as 'dark' | 'light') || 'light';
     setTheme(savedTheme);
     if (savedTheme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
+
 
     // Token & Auth check
     const savedToken = localStorage.getItem('opsai_token');

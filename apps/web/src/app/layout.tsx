@@ -17,14 +17,15 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`dark ${inter.variable}`}>
-      <body className={`${inter.className} antialiased selection:bg-zinc-800 selection:text-zinc-100`}>
+    <html lang="en" className={`${inter.variable}`}>
+      <body className={`${inter.className} antialiased selection:bg-neutral-200 selection:text-neutral-900 bg-[#F7F5F1] text-neutral-900`}>
         <AuthProvider>
           <AppLayout>{children}</AppLayout>
-          <Toaster position="top-right" theme="dark" richColors />
+          <Toaster position="top-right" theme="light" richColors />
         </AuthProvider>
       </body>
     </html>
   );
 }
+
 

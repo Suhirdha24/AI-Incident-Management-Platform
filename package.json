@@ -17,6 +17,10 @@
     "build:worker": "npm run build --workspace=apps/worker",
     "build:web": "npm run build --workspace=apps/web",
     "build": "npm run build:shared && npm run build:api && npm run build:worker && npm run build:web",
+    "start:api": "npm run start --workspace=apps/api",
+    "start:worker": "npm run start --workspace=apps/worker",
+    "start:web": "npm run start --workspace=apps/web",
+    "start": "concurrently \"npm run start:api\" \"npm run start:worker\" \"npm run start:web\"",
     "seed": "npm run seed --workspace=apps/api",
     "test": "npm run test --workspace=apps/api && npm run test --workspace=apps/worker"
   },

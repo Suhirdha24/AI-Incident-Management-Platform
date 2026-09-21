@@ -16,6 +16,7 @@ import {
   Sun,
   Moon,
   LogOut,
+  Layers,
   Activity
 } from 'lucide-react';
 import { useAuth } from '@/lib/authContext';
@@ -40,29 +41,31 @@ export function Sidebar() {
   ];
 
   return (
-    <aside className="w-60 border-r border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-zinc-950 flex flex-col justify-between h-screen sticky top-0 z-30 transition-colors duration-200">
+    <aside className="w-56 border-r border-neutral-200 dark:border-neutral-800/80 bg-warm-50 dark:bg-dark-surface flex flex-col justify-between h-screen sticky top-0 z-30 transition-colors">
       <div>
         {/* Brand Header */}
-        <div className="p-4 border-b border-zinc-200 dark:border-zinc-800/80 flex items-center space-x-3">
-          <div className="w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-emerald-400 shrink-0">
+        <Link href="/dashboard" className="p-4 border-b border-neutral-200 dark:border-neutral-800/80 flex items-center space-x-2.5 group">
+          <div className="w-7 h-7 rounded bg-terracotta-500 text-white flex items-center justify-center font-mono font-bold text-xs shadow-sm">
             <Activity className="w-4 h-4" />
           </div>
-          <div className="overflow-hidden">
-            <span className="font-semibold text-sm tracking-tight text-zinc-900 dark:text-zinc-100 flex items-center gap-1.5">
-              IncidentPulse
-              <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 border border-zinc-200 dark:border-zinc-700">
-                AI
-              </span>
-            </span>
-            <p className="text-[10px] text-zinc-500 font-mono truncate">Incident Control Plane</p>
-          </div>
-        </div>
-
-        {/* Main Nav Section */}
-        <div className="px-3 py-4 space-y-5">
           <div>
-            <div className="px-2 mb-2 text-[10px] font-mono font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
-              Core Operations
+            <div className="flex items-center space-x-1.5">
+              <span className="font-bold text-sm tracking-tight text-neutral-900 dark:text-neutral-100">
+                OpsAI
+              </span>
+              <span className="text-[9px] font-mono font-medium px-1.5 py-0.2 rounded bg-neutral-200/80 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400">
+                v2.8
+              </span>
+            </div>
+            <p className="text-[10px] text-neutral-500 dark:text-neutral-400 font-mono">Incident Intelligence</p>
+          </div>
+        </Link>
+
+        {/* Navigation Sections */}
+        <div className="px-2.5 py-4 space-y-5 text-xs">
+          <div>
+            <div className="px-2 mb-2 text-[10px] font-mono font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
+              Operations Console
             </div>
             <nav className="space-y-0.5">
               {navItems.map(item => {
@@ -72,13 +75,13 @@ export function Sidebar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center px-2.5 py-2 rounded-md text-xs transition-colors ${
+                    className={`flex items-center px-2.5 py-2 rounded-md transition-all font-medium ${
                       isActive
-                        ? 'bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 font-medium'
-                        : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100/60 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-200'
+                        ? 'bg-neutral-200/60 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border-l-2 border-terracotta-500'
+                        : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-neutral-200'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 mr-2.5 ${isActive ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400 dark:text-zinc-500'}`} />
+                    <Icon className={`w-4 h-4 mr-2.5 ${isActive ? 'text-terracotta-500' : 'text-neutral-400 dark:text-neutral-500'}`} />
                     {item.label}
                   </Link>
                 );
@@ -86,9 +89,9 @@ export function Sidebar() {
             </nav>
           </div>
 
-          {/* Administration Section */}
+          {/* Admin Tools */}
           <div>
-            <div className="px-2 mb-2 text-[10px] font-mono font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider">
+            <div className="px-2 mb-2 text-[10px] font-mono font-semibold text-neutral-400 dark:text-neutral-500 uppercase tracking-wider">
               Administration
             </div>
             <nav className="space-y-0.5">
@@ -99,13 +102,13 @@ export function Sidebar() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center px-2.5 py-2 rounded-md text-xs transition-colors ${
+                    className={`flex items-center px-2.5 py-2 rounded-md transition-all font-medium ${
                       isActive
-                        ? 'bg-zinc-100 dark:bg-zinc-800/80 text-zinc-900 dark:text-zinc-100 font-medium'
-                        : 'text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100/60 dark:hover:bg-zinc-900 hover:text-zinc-900 dark:hover:text-zinc-200'
+                        ? 'bg-neutral-200/60 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border-l-2 border-terracotta-500'
+                        : 'text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-neutral-800/50 hover:text-neutral-900 dark:hover:text-neutral-200'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 mr-2.5 ${isActive ? 'text-zinc-900 dark:text-zinc-100' : 'text-zinc-400 dark:text-zinc-500'}`} />
+                    <Icon className={`w-4 h-4 mr-2.5 ${isActive ? 'text-terracotta-500' : 'text-neutral-400 dark:text-neutral-500'}`} />
                     {item.label}
                   </Link>
                 );
@@ -115,42 +118,42 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Sidebar Footer */}
-      <div className="p-3 border-t border-zinc-200 dark:border-zinc-800/80 space-y-2">
+      {/* Footer Profile & Theme Toggle */}
+      <div className="p-3 border-t border-neutral-200 dark:border-neutral-800/80 space-y-2 text-xs">
         <button
           onClick={toggleTheme}
-          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md text-xs font-medium text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+          className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-md font-medium text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200/50 dark:hover:bg-neutral-800 transition-colors"
         >
           <span className="flex items-center">
             {theme === 'dark' ? (
-              <Sun className="w-3.5 h-3.5 mr-2 text-amber-400" />
+              <Sun className="w-3.5 h-3.5 mr-2 text-amber-500" />
             ) : (
-              <Moon className="w-3.5 h-3.5 mr-2 text-zinc-600" />
+              <Moon className="w-3.5 h-3.5 mr-2 text-neutral-600" />
             )}
-            {theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
+            {theme === 'dark' ? 'Light Theme' : 'Dark Theme'}
           </span>
         </button>
 
         {user && (
-          <div className="pt-2 border-t border-zinc-200 dark:border-zinc-800/60 flex items-center justify-between px-1">
+          <div className="pt-2 border-t border-neutral-200 dark:border-neutral-800/60 flex items-center justify-between px-1">
             <div className="flex items-center space-x-2 overflow-hidden">
               <img
                 src={user.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80'}
                 alt={user.name}
-                className="w-7 h-7 rounded-full border border-zinc-300 dark:border-zinc-700 object-cover"
+                className="w-6 h-6 rounded-full border border-neutral-300 dark:border-neutral-700 object-cover shrink-0"
               />
               <div className="truncate">
-                <p className="text-xs font-medium text-zinc-900 dark:text-zinc-100 truncate">{user.name}</p>
-                <p className="text-[10px] text-zinc-500 font-mono uppercase">{user.role}</p>
+                <p className="text-xs font-semibold text-neutral-900 dark:text-neutral-100 truncate">{user.name.split(' ')[0]}</p>
+                <p className="text-[9px] text-neutral-500 font-mono uppercase">{user.role}</p>
               </div>
             </div>
 
             <button
               onClick={logout}
               title="Log out"
-              className="p-1 rounded-md text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+              className="p-1 rounded text-neutral-400 hover:text-red-600 hover:bg-red-500/10 transition-colors"
             >
-              <LogOut className="w-4 h-4" />
+              <LogOut className="w-3.5 h-3.5" />
             </button>
           </div>
         )}
@@ -158,4 +161,3 @@ export function Sidebar() {
     </aside>
   );
 }
-

@@ -10,19 +10,11 @@ import {
   AlertTriangle,
   Sparkles,
   CheckCircle2,
-  Clock,
   UserCheck,
-  RotateCw,
   Copy,
   ArrowLeft,
   Send,
   MessageSquare,
-  Activity,
-  Layers,
-  FileCode2,
-  TrendingUp,
-  ShieldCheck,
-  ChevronRight,
   HelpCircle,
   X
 } from 'lucide-react';
@@ -126,7 +118,6 @@ export default function IncidentDetailsPage() {
     loadIncidentData();
     loadUsers();
 
-    // Socket.IO real-time updates
     const socket = getSocket();
     socket.emit('join_incident', id);
 
@@ -237,11 +228,11 @@ export default function IncidentDetailsPage() {
   if (loading) {
     return (
       <div className="p-12 space-y-6 animate-pulse">
-        <div className="h-10 bg-zinc-800/40 rounded w-1/2" />
-        <div className="h-64 bg-zinc-800/40 rounded-xl" />
+        <div className="h-10 bg-neutral-800/40 rounded w-1/2" />
+        <div className="h-64 bg-neutral-800/40 rounded" />
         <div className="grid grid-cols-2 gap-6">
-          <div className="h-48 bg-zinc-800/40 rounded-xl" />
-          <div className="h-48 bg-zinc-800/40 rounded-xl" />
+          <div className="h-48 bg-neutral-800/40 rounded" />
+          <div className="h-48 bg-neutral-800/40 rounded" />
         </div>
       </div>
     );
@@ -274,44 +265,44 @@ export default function IncidentDetailsPage() {
   };
 
   return (
-    <div className="space-y-6 pb-16 text-zinc-100 font-sans">
+    <div className="space-y-6 pb-16 text-neutral-100 font-sans p-6 max-w-[1600px] mx-auto">
       {/* Top Breadcrumb Back */}
-      <Link href="/incidents" className="text-xs text-zinc-400 hover:text-zinc-200 flex items-center gap-1.5 transition-colors font-mono">
+      <Link href="/incidents" className="text-xs text-neutral-400 hover:text-neutral-200 flex items-center gap-1.5 transition-colors font-mono">
         <ArrowLeft className="w-3.5 h-3.5" /> Back to Incidents Console
       </Link>
 
       {/* HEADER BAR */}
-      <div className="p-6 rounded-xl bg-zinc-900/60 border border-zinc-800/80 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+      <div className="p-6 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800 shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         <div className="space-y-2">
           <div className="flex items-center space-x-2.5">
-            <span className="text-xs font-mono font-semibold text-zinc-100 bg-zinc-800 px-2.5 py-0.5 rounded border border-zinc-700">
+            <span className="text-xs font-mono font-semibold text-terracotta-500 bg-neutral-100 dark:bg-neutral-900 px-2.5 py-0.5 rounded border border-neutral-200 dark:border-neutral-800">
               {incident?.incidentId || 'INC-2026-0192'}
             </span>
             <select
               value={incident?.severity || 'SEV-1'}
               onChange={e => handleSeverityChange(e.target.value)}
-              className="bg-zinc-950 border border-zinc-700 text-xs font-mono font-semibold rounded px-2 py-0.5 text-zinc-200 focus:outline-none"
+              className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-xs font-mono font-semibold rounded px-2 py-0.5 text-neutral-200 focus:outline-none"
             >
               <option value="SEV-1">SEV-1 Critical</option>
               <option value="SEV-2">SEV-2 High</option>
               <option value="SEV-3">SEV-3 Medium</option>
               <option value="SEV-4">SEV-4 Low</option>
             </select>
-            <span className="px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-zinc-800 text-zinc-300 border border-zinc-700 uppercase">
+            <span className="px-2.5 py-0.5 rounded text-xs font-mono font-semibold bg-neutral-100 dark:bg-neutral-900 text-neutral-300 border border-neutral-200 dark:border-neutral-800 uppercase">
               {incident?.status || 'INVESTIGATING'}
             </span>
           </div>
-          <h1 className="text-xl font-semibold text-zinc-100 tracking-tight">
+          <h1 className="text-xl font-semibold text-neutral-900 dark:text-neutral-100 tracking-tight">
             {incident?.title}
           </h1>
         </div>
 
-        {/* State-Machine Aware Action Buttons Toolbar */}
+        {/* Action Buttons Toolbar */}
         <div className="flex flex-wrap items-center gap-2">
           {incident?.status === 'DETECTED' && (
             <button
               onClick={() => handleStatusChange('ACKNOWLEDGED')}
-              className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white transition-colors shadow-sm"
+              className="px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-xs font-medium text-white transition-colors"
             >
               Acknowledge
             </button>
@@ -320,7 +311,7 @@ export default function IncidentDetailsPage() {
           {incident?.status === 'ACKNOWLEDGED' && (
             <button
               onClick={() => handleStatusChange('INVESTIGATING')}
-              className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-xs font-semibold text-white transition-colors shadow-sm"
+              className="px-3 py-1.5 rounded bg-amber-600 hover:bg-amber-500 text-xs font-medium text-white transition-colors"
             >
               Start Investigation
             </button>
@@ -329,7 +320,7 @@ export default function IncidentDetailsPage() {
           {incident?.status === 'INVESTIGATING' && (
             <button
               onClick={() => handleStatusChange('MITIGATING')}
-              className="px-3 py-1.5 rounded-lg bg-orange-600 hover:bg-orange-500 text-xs font-semibold text-white transition-colors shadow-sm"
+              className="px-3 py-1.5 rounded bg-orange-600 hover:bg-orange-500 text-xs font-medium text-white transition-colors"
             >
               Mark Mitigating
             </button>
@@ -338,7 +329,7 @@ export default function IncidentDetailsPage() {
           {incident?.status === 'MITIGATING' && (
             <button
               onClick={() => setShowResolveModal(true)}
-              className="px-3.5 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-zinc-950 text-xs font-bold flex items-center gap-1.5 transition-colors shadow-sm"
+              className="px-3.5 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-medium flex items-center gap-1.5 transition-colors"
             >
               <CheckCircle2 className="w-3.5 h-3.5" />
               Resolve Incident
@@ -348,7 +339,7 @@ export default function IncidentDetailsPage() {
           {incident?.status === 'RESOLVED' && (
             <button
               onClick={() => handleStatusChange('CLOSED')}
-              className="px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-xs font-semibold text-zinc-200 transition-colors border border-zinc-700/60"
+              className="px-3 py-1.5 rounded bg-neutral-800 hover:bg-neutral-700 text-xs font-medium text-neutral-200 transition-colors border border-neutral-700"
             >
               Close Record
             </button>
@@ -357,89 +348,89 @@ export default function IncidentDetailsPage() {
           <button
             onClick={handleTriggerAI}
             disabled={analyzing}
-            className="px-3.5 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-100 border border-zinc-700 text-xs font-medium flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-1.5 rounded bg-terracotta-500 hover:bg-terracotta-600 text-white border border-terracotta-600 text-xs font-medium flex items-center gap-1.5 transition-colors"
           >
-            <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+            <Sparkles className="w-3.5 h-3.5" />
             {analyzing ? 'Analyzing...' : 'Analyze with AI'}
           </button>
         </div>
       </div>
 
       {/* SECTION 1: INCIDENT OVERVIEW */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 p-4 rounded-xl bg-zinc-900/60 border border-zinc-800/80 text-xs">
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-5 gap-3 p-4 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800 text-xs">
         <div>
-          <span className="text-[10px] text-zinc-500 font-mono uppercase block">Target Service</span>
-          <span className="text-zinc-100 font-medium mt-0.5 block">{incident?.serviceId?.name || 'Payment API'}</span>
+          <span className="text-[10px] text-neutral-500 font-mono uppercase block">Target Service</span>
+          <span className="text-neutral-900 dark:text-neutral-100 font-medium mt-0.5 block">{incident?.serviceId?.name || 'Payment API'}</span>
         </div>
         <div>
-          <span className="text-[10px] text-zinc-500 font-mono uppercase block">Environment</span>
-          <span className="text-zinc-100 font-medium mt-0.5 block">{incident?.environment || 'Production'}</span>
+          <span className="text-[10px] text-neutral-500 font-mono uppercase block">Environment</span>
+          <span className="text-neutral-900 dark:text-neutral-100 font-medium mt-0.5 block">{incident?.environment || 'Production'}</span>
         </div>
         <div>
-          <span className="text-[10px] text-zinc-500 font-mono uppercase block">Assigned Engineer</span>
+          <span className="text-[10px] text-neutral-500 font-mono uppercase block">Assigned Lead</span>
           <div className="flex items-center space-x-1.5 mt-0.5">
-            <span className="text-zinc-200 font-medium">{incident?.assignedEngineerId?.name || 'Unassigned'}</span>
+            <span className="text-neutral-800 dark:text-neutral-200 font-medium">{incident?.assignedEngineerId?.name || 'Unassigned'}</span>
             <button
               onClick={() => setShowAssignModal(true)}
-              className="text-[10px] font-mono text-sky-400 hover:underline font-semibold"
+              className="text-[10px] font-mono text-terracotta-500 hover:underline font-semibold"
             >
               [Assign]
             </button>
           </div>
         </div>
         <div>
-          <span className="text-[10px] text-zinc-500 font-mono uppercase block">Observed Impact</span>
-          <span className="text-red-400 font-medium mt-0.5 block">{incident?.impactSummary || '12,483 requests affected'}</span>
+          <span className="text-[10px] text-neutral-500 font-mono uppercase block">Observed Impact</span>
+          <span className="text-rose-400 font-medium mt-0.5 block">{incident?.impactSummary || '12,483 requests affected'}</span>
         </div>
         <div>
-          <span className="text-[10px] text-zinc-500 font-mono uppercase block">Active Duration</span>
-          <span className="text-zinc-100 font-mono mt-0.5 block">{incident?.durationMinutes ? `${incident.durationMinutes}m` : '32m 14s'}</span>
+          <span className="text-[10px] text-neutral-500 font-mono uppercase block">Active Duration</span>
+          <span className="text-neutral-900 dark:text-neutral-100 font-mono mt-0.5 block">{incident?.durationMinutes ? `${incident.durationMinutes}m` : '32m 14s'}</span>
         </div>
       </div>
 
       {/* SECTION 2: AI INCIDENT INVESTIGATION PANEL */}
-      <div className="p-6 rounded-xl bg-zinc-900/80 border border-zinc-800 space-y-6">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-zinc-800/80 pb-4 gap-2">
+      <div className="p-6 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-neutral-200 dark:border-neutral-800 pb-4 gap-2">
           <div className="flex items-center space-x-2.5">
-            <div className="w-8 h-8 rounded-lg bg-zinc-800 border border-zinc-700 text-emerald-400 flex items-center justify-center">
+            <div className="w-8 h-8 rounded bg-terracotta-500/10 border border-terracotta-500/20 text-terracotta-500 flex items-center justify-center">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-sm font-semibold text-zinc-100 flex items-center gap-2">
-                AI Investigation
-                <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  Signal Correlation Active
+              <h2 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                AI Investigation Engine
+                <span className="text-[10px] font-mono font-semibold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                  Telemetry Correlation Active
                 </span>
               </h2>
-              <p className="text-xs text-zinc-400">Automated signal correlation and hypothesis generation engine</p>
+              <p className="text-xs text-neutral-500 dark:text-neutral-400">Automated root cause identification and evidence clustering</p>
             </div>
           </div>
 
           <button
             onClick={() => setShowAiDrawer(true)}
-            className="px-3 py-1.5 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-medium hover:bg-zinc-700 flex items-center gap-1.5 self-start sm:self-auto transition-colors"
+            className="px-3 py-1.5 rounded bg-neutral-100 dark:bg-neutral-900 border border-neutral-300 dark:border-neutral-800 text-neutral-800 dark:text-neutral-200 text-xs font-medium hover:bg-neutral-200 dark:hover:bg-neutral-800 flex items-center gap-1.5 self-start sm:self-auto transition-colors"
           >
-            <HelpCircle className="w-3.5 h-3.5 text-zinc-400" />
-            Ask Incident Assistant
+            <HelpCircle className="w-3.5 h-3.5 text-neutral-400" />
+            Ask Assistant
           </button>
         </div>
 
         {/* Probable Cause & Confidence */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center bg-zinc-950/80 p-4 rounded-lg border border-zinc-800/80">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center bg-neutral-50 dark:bg-neutral-900/60 p-4 rounded border border-neutral-200 dark:border-neutral-800">
           <div className="md:col-span-2">
-            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">Probable Cause</span>
-            <h3 className="text-base font-semibold text-zinc-100 mt-1">{analysis.probableCause}</h3>
-            <p className="text-xs text-zinc-400 mt-1">{analysis.potentialImpact}</p>
+            <span className="text-[10px] font-mono text-neutral-500 uppercase tracking-wider">Probable Cause</span>
+            <h3 className="text-base font-semibold text-neutral-900 dark:text-neutral-100 mt-1">{analysis.probableCause}</h3>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1">{analysis.potentialImpact}</p>
           </div>
 
-          <div className="p-3 rounded-lg bg-zinc-900 border border-zinc-800 space-y-2">
+          <div className="p-3 rounded bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 space-y-2">
             <div className="flex justify-between text-xs">
-              <span className="text-zinc-400 font-medium">Confidence Score</span>
+              <span className="text-neutral-400 font-medium">Confidence Score</span>
               <span className="text-emerald-400 font-mono font-semibold">{Math.round((analysis.confidence || 0.87) * 100)}%</span>
             </div>
-            <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+            <div className="w-full bg-neutral-200 dark:bg-neutral-800 h-1.5 rounded overflow-hidden">
               <div
-                className="bg-emerald-500 h-full rounded-full transition-all duration-500"
+                className="bg-emerald-500 h-full transition-all duration-500"
                 style={{ width: `${(analysis.confidence || 0.87) * 100}%` }}
               />
             </div>
@@ -449,12 +440,12 @@ export default function IncidentDetailsPage() {
         {/* CONFIRMED EVIDENCE VS HYPOTHESIS */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Confirmed Evidence */}
-          <div className="p-4 rounded-lg bg-zinc-950/80 border border-zinc-800/80 space-y-3">
+          <div className="p-4 rounded bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 space-y-3">
             <span className="text-xs font-mono font-semibold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4" />
               Confirmed Evidence
             </span>
-            <ul className="space-y-2 text-xs text-zinc-300">
+            <ul className="space-y-2 text-xs text-neutral-700 dark:text-neutral-300">
               {(analysis.confirmedEvidence || []).map((ev: string, idx: number) => (
                 <li key={idx} className="flex items-start gap-2">
                   <span className="text-emerald-400 font-semibold">•</span>
@@ -465,12 +456,12 @@ export default function IncidentDetailsPage() {
           </div>
 
           {/* AI Hypothesis (Explicit Warning) */}
-          <div className="p-4 rounded-lg bg-zinc-950/80 border border-zinc-800/80 space-y-3">
+          <div className="p-4 rounded bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 space-y-3">
             <span className="text-xs font-mono font-semibold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
               <AlertTriangle className="w-4 h-4" />
-              Hypothesis — Verify with Operational Evidence
+              AI Hypothesis — Verify with Operational Evidence
             </span>
-            <ul className="space-y-2 text-xs text-zinc-300">
+            <ul className="space-y-2 text-xs text-neutral-700 dark:text-neutral-300">
               {(analysis.hypotheses || []).map((hyp: string, idx: number) => (
                 <li key={idx} className="flex items-start gap-2">
                   <span className="text-amber-400 font-semibold">•</span>
@@ -482,19 +473,19 @@ export default function IncidentDetailsPage() {
         </div>
 
         {/* RECOMMENDED INVESTIGATION & MITIGATION */}
-        <div className="p-4 rounded-lg bg-zinc-950/80 border border-zinc-800/80 space-y-3">
+        <div className="p-4 rounded bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-mono font-semibold text-zinc-300 uppercase tracking-wider">
+            <span className="text-xs font-mono font-semibold text-neutral-700 dark:text-neutral-300 uppercase tracking-wider">
               Recommended Investigation Steps
             </span>
             <button
               onClick={() => copyToClipboard(analysis.recommendedInvestigation?.join('\n') || '')}
-              className="text-[11px] text-zinc-500 hover:text-zinc-300 flex items-center gap-1 font-mono"
+              className="text-[11px] text-neutral-500 hover:text-neutral-300 flex items-center gap-1 font-mono"
             >
               <Copy className="w-3 h-3" /> Copy Steps
             </button>
           </div>
-          <ol className="list-decimal list-inside space-y-1.5 text-xs text-zinc-300 font-normal">
+          <ol className="list-decimal list-inside space-y-1.5 text-xs text-neutral-700 dark:text-neutral-300 font-normal">
             {(analysis.recommendedInvestigation || []).map((step: string, idx: number) => (
               <li key={idx} className="leading-relaxed">{step}</li>
             ))}
@@ -503,91 +494,91 @@ export default function IncidentDetailsPage() {
       </div>
 
       {/* SECTION 3: INCIDENT METRICS CHARTS */}
-      <div className="p-5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 shadow-sm space-y-4">
+      <div className="p-5 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-sm font-semibold text-zinc-100">Real-Time Telemetry Metrics</h3>
-            <p className="text-xs text-zinc-400">Error rate and database connection utilization during incident window</p>
+            <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Real-Time Telemetry Signals</h3>
+            <p className="text-xs text-neutral-500 dark:text-neutral-400">Error rate and database connection utilization during incident window</p>
           </div>
-          <span className="text-xs text-red-400 font-mono font-medium px-2 py-0.5 rounded bg-red-500/10 border border-red-500/20">
-            Anomaly Window
+          <span className="text-xs text-rose-400 font-mono font-semibold px-2 py-0.5 rounded bg-rose-500/10 border border-rose-500/20">
+            Anomaly Window Active
           </span>
         </div>
 
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={metrics || []}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#27272a" opacity={0.6} />
-              <XAxis dataKey="timestamp" stroke="#71717a" fontSize={10} tickFormatter={t => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} />
-              <YAxis stroke="#71717a" fontSize={10} />
-              <Tooltip contentStyle={{ backgroundColor: '#18181b', borderColor: '#27272a', fontSize: '11px', color: '#f4f4f5' }} />
-              <Line type="monotone" dataKey="errorRate" stroke="#ef4444" strokeWidth={2} name="Error Rate (%)" />
-              <Line type="monotone" dataKey="dbConnectionsPercent" stroke="#3b82f6" strokeWidth={2} name="DB Connections (%)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#262626" opacity={0.6} />
+              <XAxis dataKey="timestamp" stroke="#737373" fontSize={10} tickFormatter={t => new Date(t).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} />
+              <YAxis stroke="#737373" fontSize={10} />
+              <Tooltip contentStyle={{ backgroundColor: '#171717', borderColor: '#262626', fontSize: '11px', color: '#fff' }} />
+              <Line type="monotone" dataKey="errorRate" stroke="#e11d48" strokeWidth={2} name="Error Rate (%)" />
+              <Line type="monotone" dataKey="dbConnectionsPercent" stroke="#A8613D" strokeWidth={2} name="DB Connections (%)" />
             </LineChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       {/* TERMINAL LOGS PANEL */}
-      <div className="p-5 rounded-xl bg-zinc-950 border border-zinc-800/80 shadow-xl space-y-3 font-mono text-xs">
-        <div className="flex items-center justify-between border-b border-zinc-800/80 pb-2">
+      <div className="p-5 rounded bg-neutral-950 border border-neutral-800 shadow-xl space-y-3 font-mono text-xs">
+        <div className="flex items-center justify-between border-b border-neutral-800 pb-2">
           <div className="flex items-center space-x-2">
-            <span className="text-zinc-400 font-semibold">payment-api-stdout.log</span>
+            <span className="text-neutral-400 font-medium">payment-api-stdout.log</span>
           </div>
-          <span className="text-[10px] text-zinc-500 uppercase tracking-wider">Production Pod Stream</span>
+          <span className="text-[10px] text-neutral-500 uppercase tracking-wider">Pod Stream</span>
         </div>
 
-        <div className="space-y-1 text-[11px] leading-relaxed max-h-48 overflow-y-auto p-2.5 bg-black/80 rounded-lg">
-          <p className="text-zinc-400"><span className="text-zinc-600">14:30:12</span> <span className="text-emerald-400 font-semibold">INFO</span> Deployment v2.8.4 initialized on payment-api-pod-7f9x2</p>
-          <p className="text-zinc-400"><span className="text-zinc-600">14:31:58</span> <span className="text-emerald-400 font-semibold">INFO</span> Payment checkout request started - TxID: 8f9b20a1</p>
-          <p className="text-zinc-400"><span className="text-zinc-600">14:32:04</span> <span className="text-red-400 font-semibold">ERROR</span> Database connection timeout after 5000ms [Postgres: pg_pool_exhausted]</p>
-          <p className="text-zinc-400"><span className="text-zinc-600">14:32:07</span> <span className="text-red-400 font-semibold">ERROR</span> Failed to acquire database connection from pool (max_connections=50 reached)</p>
-          <p className="text-zinc-400"><span className="text-zinc-600">14:32:15</span> <span className="text-amber-400 font-semibold">WARN</span> PgBouncer connection pool utilization reached 96% threshold</p>
-          <p className="text-zinc-400"><span className="text-zinc-600">14:32:28</span> <span className="text-red-400 font-semibold">ERROR</span> Payment request failed with HTTP 500 InternalServerError - ClientAborted</p>
-          <p className="text-zinc-400"><span className="text-zinc-600">14:33:01</span> <span className="text-zinc-300 font-semibold">ALERT</span> Datadog Webhook trigger sent: ALERT-1001 Error Rate 18.7% &gt; 5%</p>
+        <div className="space-y-1 text-[11px] leading-relaxed max-h-48 overflow-y-auto p-2.5 bg-black rounded">
+          <p className="text-neutral-400"><span className="text-neutral-600">14:30:12</span> <span className="text-emerald-400 font-semibold">INFO</span> Deployment v2.8.4 initialized on payment-api-pod-7f9x2</p>
+          <p className="text-neutral-400"><span className="text-neutral-600">14:31:58</span> <span className="text-emerald-400 font-semibold">INFO</span> Payment checkout request started - TxID: 8f9b20a1</p>
+          <p className="text-neutral-400"><span className="text-neutral-600">14:32:04</span> <span className="text-rose-400 font-semibold">ERROR</span> Database connection timeout after 5000ms [Postgres: pg_pool_exhausted]</p>
+          <p className="text-neutral-400"><span className="text-neutral-600">14:32:07</span> <span className="text-rose-400 font-semibold">ERROR</span> Failed to acquire database connection from pool (max_connections=50 reached)</p>
+          <p className="text-neutral-400"><span className="text-neutral-600">14:32:15</span> <span className="text-amber-400 font-semibold">WARN</span> PgBouncer connection pool utilization reached 96% threshold</p>
+          <p className="text-neutral-400"><span className="text-neutral-600">14:32:28</span> <span className="text-rose-400 font-semibold">ERROR</span> Payment request failed with HTTP 500 InternalServerError - ClientAborted</p>
+          <p className="text-neutral-400"><span className="text-neutral-600">14:33:01</span> <span className="text-neutral-300 font-semibold">ALERT</span> Datadog Webhook trigger sent: ALERT-1001 Error Rate 18.7% &gt; 5%</p>
         </div>
       </div>
 
       {/* SECTION 4 & 5: TIMELINE & CORRELATED ALERTS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* TIMELINE */}
-        <div className="p-5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 shadow-sm space-y-4">
-          <h3 className="text-sm font-semibold text-zinc-100">Incident Timeline</h3>
-          <div className="relative border-l border-zinc-800 ml-3 space-y-5">
+        <div className="p-5 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
+          <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Incident Timeline</h3>
+          <div className="relative border-l border-neutral-200 dark:border-neutral-800 ml-3 space-y-5">
             {(events || []).map((evt: any) => (
               <div key={evt._id || evt.title} className="relative pl-5">
-                <span className="absolute -left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-zinc-400 ring-4 ring-zinc-950" />
+                <span className="absolute -left-1.5 top-1 w-2.5 h-2.5 rounded-full bg-neutral-400 ring-4 ring-white dark:ring-neutral-900" />
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-medium text-zinc-200">{evt.title}</span>
-                  <span className="text-[10px] text-zinc-500 font-mono">
+                  <span className="font-medium text-neutral-900 dark:text-neutral-200">{evt.title}</span>
+                  <span className="text-[10px] text-neutral-500 font-mono">
                     {new Date(evt.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
-                <p className="text-xs text-zinc-400 mt-0.5">{evt.description}</p>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{evt.description}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* CORRELATED ALERTS */}
-        <div className="p-5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 shadow-sm space-y-4">
+        <div className="p-5 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold text-zinc-100">Correlated Telemetry Alerts</h3>
-            <span className="text-xs text-zinc-400 font-mono">4 Alerts</span>
+            <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Correlated Telemetry Alerts</h3>
+            <span className="text-xs text-neutral-400 font-mono">4 Alerts</span>
           </div>
 
-          <div className="p-3 rounded-lg bg-zinc-950/80 border border-zinc-800/80 text-xs text-zinc-400 leading-relaxed">
+          <div className="p-3 rounded bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
             4 related telemetry alerts grouped based on service key, 10-minute time window, and signal proximity.
           </div>
 
           <div className="space-y-2">
             {(alerts || []).map((a: any) => (
-              <div key={a._id || a.alertId} className="p-3 rounded-lg border border-zinc-800/80 bg-zinc-950/40 flex items-center justify-between text-xs">
+              <div key={a._id || a.alertId} className="p-3 rounded border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 flex items-center justify-between text-xs">
                 <div>
-                  <span className="font-mono font-medium text-zinc-200 block">{a.alertId} • {a.metric}</span>
-                  <span className="text-[10px] text-zinc-500 font-mono">Value: {a.value} (Threshold: {a.threshold})</span>
+                  <span className="font-mono font-medium text-neutral-900 dark:text-neutral-200 block">{a.alertId} • {a.metric}</span>
+                  <span className="text-[10px] text-neutral-500 font-mono">Value: {a.value} (Threshold: {a.threshold})</span>
                 </div>
-                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-red-500/10 text-red-400 border border-red-500/20">
+                <span className="px-2 py-0.5 rounded text-[10px] font-mono font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
                   {a.severity}
                 </span>
               </div>
@@ -599,39 +590,39 @@ export default function IncidentDetailsPage() {
       {/* SECTION 6 & 7: RECENT DEPLOYMENTS & SIMILAR INCIDENTS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* RECENT DEPLOYMENTS */}
-        <div className="p-5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 shadow-sm space-y-4">
-          <h3 className="text-sm font-semibold text-zinc-100">Deployment Correlation</h3>
-          <div className="p-3 rounded-lg bg-zinc-950/80 border border-zinc-800/80 text-xs text-zinc-300 flex items-center gap-2">
+        <div className="p-5 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
+          <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Deployment Correlation</h3>
+          <div className="p-3 rounded bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200 dark:border-neutral-800 text-xs text-neutral-700 dark:text-neutral-300 flex items-center gap-2">
             <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
             <span>Deployment payment-api v2.8.4 occurred 2 minutes before incident onset.</span>
           </div>
 
           {(recentDeployments || []).map((dep: any) => (
-            <div key={dep._id || dep.version} className="p-3.5 rounded-lg border border-zinc-800/80 bg-zinc-950/40 space-y-1 text-xs">
+            <div key={dep._id || dep.version} className="p-3.5 rounded border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 space-y-1 text-xs">
               <div className="flex items-center justify-between">
-                <span className="font-medium text-zinc-200 font-mono">{dep.serviceKey} {dep.version}</span>
-                <span className="text-[10px] text-zinc-500 font-mono">Commit {dep.commitHash}</span>
+                <span className="font-medium text-neutral-900 dark:text-neutral-200 font-mono">{dep.serviceKey} {dep.version}</span>
+                <span className="text-[10px] text-neutral-500 font-mono">Commit {dep.commitHash}</span>
               </div>
-              <p className="text-zinc-400">{dep.changes}</p>
-              <span className="text-[10px] text-zinc-500 font-mono block">Deployed by {dep.deployedBy}</span>
+              <p className="text-neutral-600 dark:text-neutral-400">{dep.changes}</p>
+              <span className="text-[10px] text-neutral-500 font-mono block">Deployed by {dep.deployedBy}</span>
             </div>
           ))}
         </div>
 
         {/* SIMILAR INCIDENTS */}
-        <div className="p-5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 shadow-sm space-y-4">
-          <h3 className="text-sm font-semibold text-zinc-100">Similar Historical Incidents</h3>
+        <div className="p-5 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
+          <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100">Similar Historical Incidents</h3>
           <div className="space-y-3">
             {(similarIncidents || []).map((sim: any) => (
-              <div key={sim.incidentId} className="p-3.5 rounded-lg border border-zinc-800/80 bg-zinc-950/40 text-xs space-y-1.5">
+              <div key={sim.incidentId} className="p-3.5 rounded border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 text-xs space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono font-medium text-zinc-200">{sim.incidentId}</span>
+                  <span className="font-mono font-medium text-neutral-900 dark:text-neutral-200">{sim.incidentId}</span>
                   <span className="text-[10px] font-mono font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
                     {Math.round(sim.similarityScore * 100)}% Match
                   </span>
                 </div>
-                <p className="font-medium text-zinc-200">{sim.title}</p>
-                <div className="text-[11px] text-zinc-400 space-y-0.5">
+                <p className="font-medium text-neutral-900 dark:text-neutral-200">{sim.title}</p>
+                <div className="text-[11px] text-neutral-500 dark:text-neutral-400 space-y-0.5">
                   <p><strong>Root Cause:</strong> {sim.rootCause}</p>
                   <p><strong>Resolution:</strong> {sim.resolution}</p>
                 </div>
@@ -642,29 +633,29 @@ export default function IncidentDetailsPage() {
       </div>
 
       {/* SECTION 8: COLLABORATION & INVESTIGATION NOTES */}
-      <div className="p-5 rounded-xl bg-zinc-900/60 border border-zinc-800/80 shadow-sm space-y-4">
-        <h3 className="text-sm font-semibold text-zinc-100 flex items-center gap-2">
-          <MessageSquare className="w-4 h-4 text-zinc-400" />
+      <div className="p-5 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800 shadow-sm space-y-4">
+        <h3 className="text-sm font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+          <MessageSquare className="w-4 h-4 text-neutral-400" />
           Engineering Collaboration & Notes
         </h3>
 
         <div className="space-y-3">
           {(comments || []).map((c: any) => (
-            <div key={c._id} className="p-3 rounded-lg border border-zinc-800/80 bg-zinc-950/40 space-y-1 text-xs">
+            <div key={c._id} className="p-3 rounded border border-neutral-200 dark:border-neutral-800 bg-neutral-50 dark:bg-neutral-900/40 space-y-1 text-xs">
               <div className="flex items-center justify-between">
-                <span className="font-medium text-zinc-200 flex items-center gap-1.5">
+                <span className="font-medium text-neutral-900 dark:text-neutral-200 flex items-center gap-1.5">
                   {c.userId?.name || 'Engineer'}
                   {c.isNote && (
-                    <span className="text-[9px] bg-zinc-800 text-zinc-400 px-1.5 py-0.5 rounded border border-zinc-700 uppercase font-mono">
+                    <span className="text-[9px] bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 px-1.5 py-0.5 rounded border border-neutral-300 dark:border-neutral-700 uppercase font-mono">
                       Note
                     </span>
                   )}
                 </span>
-                <span className="text-[10px] text-zinc-500 font-mono">
+                <span className="text-[10px] text-neutral-500 font-mono">
                   {new Date(c.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
-              <p className="text-zinc-300 leading-relaxed">{c.text}</p>
+              <p className="text-neutral-700 dark:text-neutral-300 leading-relaxed">{c.text}</p>
             </div>
           ))}
         </div>
@@ -675,16 +666,16 @@ export default function IncidentDetailsPage() {
             placeholder="Add investigation note or update team..."
             value={newComment}
             onChange={e => setNewComment(e.target.value)}
-            className="w-full bg-zinc-950 border border-zinc-800 text-zinc-100 text-xs rounded-lg p-3 focus:outline-none focus:border-zinc-500 placeholder:text-zinc-600"
+            className="w-full bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-neutral-900 dark:text-neutral-100 text-xs rounded p-3 focus:outline-none focus:border-terracotta-500 placeholder:text-neutral-500"
           />
 
           <div className="flex items-center justify-between">
-            <label className="flex items-center space-x-2 text-xs text-zinc-400 cursor-pointer">
+            <label className="flex items-center space-x-2 text-xs text-neutral-500 dark:text-neutral-400 cursor-pointer">
               <input
                 type="checkbox"
                 checked={isNote}
                 onChange={e => setIsNote(e.target.checked)}
-                className="rounded bg-zinc-900 border-zinc-800 text-zinc-100 accent-zinc-100"
+                className="rounded bg-neutral-100 dark:bg-neutral-900 border-neutral-300 dark:border-neutral-800 text-terracotta-500 accent-terracotta-500"
               />
               <span>Mark as Investigation Note</span>
             </label>
@@ -692,7 +683,7 @@ export default function IncidentDetailsPage() {
             <button
               type="submit"
               disabled={commentLoading}
-              className="px-4 py-2 rounded-lg bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-semibold flex items-center gap-1.5 shadow-sm transition-colors"
+              className="px-3.5 py-1.5 rounded bg-terracotta-500 text-white hover:bg-terracotta-600 text-xs font-medium flex items-center gap-1.5 shadow-sm transition-colors"
             >
               <Send className="w-3.5 h-3.5" />
               {commentLoading ? 'Posting...' : 'Add Note'}
@@ -703,20 +694,20 @@ export default function IncidentDetailsPage() {
 
       {/* AI INVESTIGATION ASSISTANT DRAWER */}
       {showAiDrawer && (
-        <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-zinc-950 border-l border-zinc-800 shadow-2xl p-6 flex flex-col justify-between animate-in slide-in-from-right duration-200">
+        <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-[#171717] border-l border-neutral-800 shadow-2xl p-6 flex flex-col justify-between text-neutral-100">
           <div className="space-y-4 flex-1 overflow-y-auto pr-1">
-            <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
-              <span className="text-sm font-semibold text-zinc-100 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-400" />
+            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
+              <span className="text-sm font-semibold text-white flex items-center gap-2">
+                <Sparkles className="w-4 h-4 text-terracotta-500" />
                 Incident Assistant
               </span>
-              <button onClick={() => setShowAiDrawer(false)} className="text-zinc-400 hover:text-zinc-200">
+              <button onClick={() => setShowAiDrawer(false)} className="text-neutral-400 hover:text-white">
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             <div className="space-y-2">
-              <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-zinc-500">Suggested Questions</span>
+              <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-neutral-500">Suggested Questions</span>
               <div className="space-y-1.5">
                 {[
                   'Why is this incident SEV-1?',
@@ -727,7 +718,7 @@ export default function IncidentDetailsPage() {
                   <button
                     key={q}
                     onClick={() => handleAskAI(q)}
-                    className="w-full text-left p-2 rounded-lg bg-zinc-900 hover:bg-zinc-800/80 border border-zinc-800 text-xs text-zinc-300 font-medium transition-colors"
+                    className="w-full text-left p-2 rounded bg-neutral-900 hover:bg-neutral-800 border border-neutral-800 text-xs text-neutral-300 font-medium transition-colors"
                   >
                     {q}
                   </button>
@@ -735,12 +726,11 @@ export default function IncidentDetailsPage() {
               </div>
             </div>
 
-            {/* Q&A Chat History */}
-            <div className="space-y-3 pt-4 border-t border-zinc-800/80">
+            <div className="space-y-3 pt-4 border-t border-neutral-800">
               {aiChatHistory.map((item, idx) => (
                 <div key={idx} className="space-y-1 text-xs">
-                  <p className="font-semibold text-zinc-300">Q: {item.q}</p>
-                  <div className="p-3 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-300 leading-relaxed">
+                  <p className="font-semibold text-neutral-300">Q: {item.q}</p>
+                  <div className="p-3 rounded bg-neutral-900 border border-neutral-800 text-neutral-300 leading-relaxed">
                     {item.a}
                   </div>
                 </div>
@@ -748,19 +738,19 @@ export default function IncidentDetailsPage() {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-zinc-800/80 flex items-center space-x-2">
+          <div className="pt-4 border-t border-neutral-800 flex items-center space-x-2">
             <input
               type="text"
               placeholder="Ask AI about this incident..."
               value={aiQuestion}
               onChange={e => setAiQuestion(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleAskAI(aiQuestion)}
-              className="flex-1 bg-zinc-900 border border-zinc-800 text-zinc-100 text-xs rounded-lg p-2.5 focus:outline-none focus:border-zinc-500"
+              className="flex-1 bg-neutral-900 border border-neutral-800 text-neutral-100 text-xs rounded p-2.5 focus:outline-none focus:border-terracotta-500"
             />
             <button
               onClick={() => handleAskAI(aiQuestion)}
               disabled={aiAsking}
-              className="p-2.5 rounded-lg bg-white text-zinc-950 font-semibold"
+              className="p-2.5 rounded bg-terracotta-500 text-white font-medium"
             >
               <Send className="w-3.5 h-3.5" />
             </button>
@@ -770,69 +760,69 @@ export default function IncidentDetailsPage() {
 
       {/* RESOLUTION MODAL */}
       {showResolveModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl w-full max-w-lg p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in-95">
-            <h2 className="text-base font-semibold text-zinc-100">Resolve Incident {incident?.incidentId}</h2>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#171717] border border-neutral-800 rounded w-full max-w-lg p-6 space-y-4 shadow-2xl text-neutral-100">
+            <h2 className="text-base font-semibold text-white">Resolve Incident {incident?.incidentId}</h2>
 
             <form onSubmit={handleResolveIncident} className="space-y-3 text-xs">
               <div>
-                <label className="font-medium text-zinc-300 block mb-1">Confirmed Root Cause</label>
+                <label className="font-medium text-neutral-300 block mb-1">Confirmed Root Cause</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. Database connection pool exhaustion caused by unindexed join"
+                  placeholder="e.g. Database connection pool exhaustion caused by unindexed join query"
                   value={rootCause}
                   onChange={e => setRootCause(e.target.value)}
-                  className="w-full bg-zinc-950 border border-zinc-800 text-zinc-100 p-2.5 rounded-lg focus:outline-none focus:border-zinc-500"
+                  className="w-full bg-neutral-900 border border-neutral-800 text-neutral-100 p-2.5 rounded focus:outline-none focus:border-terracotta-500"
                 />
               </div>
 
               <div>
-                <label className="font-medium text-zinc-300 block mb-1">Resolution Summary</label>
+                <label className="font-medium text-neutral-300 block mb-1">Resolution Summary</label>
                 <textarea
                   required
                   rows={2}
                   placeholder="e.g. Scaled PgBouncer connection pool max size from 50 to 100 connections."
                   value={resolutionSummary}
                   onChange={e => setResolutionSummary(e.target.value)}
-                  className="w-full bg-zinc-950 border border-zinc-800 text-zinc-100 p-2.5 rounded-lg focus:outline-none focus:border-zinc-500"
+                  className="w-full bg-neutral-900 border border-neutral-800 text-neutral-100 p-2.5 rounded focus:outline-none focus:border-terracotta-500"
                 />
               </div>
 
               <div>
-                <label className="font-medium text-zinc-300 block mb-1">Actions Taken</label>
+                <label className="font-medium text-neutral-300 block mb-1">Actions Taken</label>
                 <input
                   type="text"
                   required
                   placeholder="e.g. Updated deployment config and restarted checkout pods"
                   value={actionsTaken}
                   onChange={e => setActionsTaken(e.target.value)}
-                  className="w-full bg-zinc-950 border border-zinc-800 text-zinc-100 p-2.5 rounded-lg focus:outline-none focus:border-zinc-500"
+                  className="w-full bg-neutral-900 border border-neutral-800 text-neutral-100 p-2.5 rounded focus:outline-none focus:border-terracotta-500"
                 />
               </div>
 
               <div>
-                <label className="font-medium text-zinc-300 block mb-1">Customer / System Impact</label>
+                <label className="font-medium text-neutral-300 block mb-1">Customer / System Impact</label>
                 <input
                   type="text"
                   required
                   value={impactText}
                   onChange={e => setImpactText(e.target.value)}
-                  className="w-full bg-zinc-950 border border-zinc-800 text-zinc-100 p-2.5 rounded-lg focus:outline-none focus:border-zinc-500"
+                  className="w-full bg-neutral-900 border border-neutral-800 text-neutral-100 p-2.5 rounded focus:outline-none focus:border-terracotta-500"
                 />
               </div>
 
-              <div className="flex items-center justify-end space-x-2 pt-2">
+              <div className="flex items-center justify-end space-x-2 pt-2 border-t border-neutral-800">
                 <button
                   type="button"
                   onClick={() => setShowResolveModal(false)}
-                  className="px-4 py-2 rounded-lg text-zinc-400 hover:text-zinc-200 font-medium"
+                  className="px-3.5 py-1.5 rounded text-neutral-400 hover:text-white font-medium"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-white text-zinc-950 font-semibold shadow-sm hover:bg-zinc-200 transition-colors"
+                  className="px-3.5 py-1.5 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-medium shadow-sm transition-colors"
                 >
                   Resolve Incident
                 </button>
@@ -844,19 +834,19 @@ export default function IncidentDetailsPage() {
 
       {/* ASSIGN ENGINEER MODAL */}
       {showAssignModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-zinc-900 border border-zinc-800 rounded-xl w-full max-w-md p-6 space-y-4 shadow-2xl animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-3">
-              <h2 className="text-base font-semibold text-zinc-100">Assign Lead Engineer</h2>
-              <button onClick={() => setShowAssignModal(false)} className="text-zinc-400 hover:text-zinc-200">✕</button>
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#171717] border border-neutral-800 rounded w-full max-w-md p-6 space-y-4 shadow-2xl text-neutral-100">
+            <div className="flex items-center justify-between border-b border-neutral-800 pb-3">
+              <h2 className="text-base font-semibold text-white">Assign Lead Engineer</h2>
+              <button onClick={() => setShowAssignModal(false)} className="text-neutral-400 hover:text-white">✕</button>
             </div>
 
             <div className="space-y-3 text-xs">
-              <label className="font-medium text-zinc-300 block">Select Team Member</label>
+              <label className="font-medium text-neutral-300 block">Select Team Member</label>
               <select
                 value={selectedEngineerId}
                 onChange={e => setSelectedEngineerId(e.target.value)}
-                className="w-full bg-zinc-950 border border-zinc-800 text-zinc-100 p-2.5 rounded-lg focus:outline-none focus:border-zinc-500"
+                className="w-full bg-neutral-900 border border-neutral-800 text-neutral-100 p-2.5 rounded focus:outline-none"
               >
                 <option value="">-- Choose Engineer or Manager --</option>
                 {users.map(u => (
@@ -866,11 +856,11 @@ export default function IncidentDetailsPage() {
                 ))}
               </select>
 
-              <div className="flex items-center justify-end space-x-2 pt-2">
+              <div className="flex items-center justify-end space-x-2 pt-2 border-t border-neutral-800">
                 <button
                   type="button"
                   onClick={() => setShowAssignModal(false)}
-                  className="px-4 py-2 rounded-lg text-zinc-400 hover:text-zinc-200 font-medium"
+                  className="px-3.5 py-1.5 rounded text-neutral-400 hover:text-white font-medium"
                 >
                   Cancel
                 </button>
@@ -878,7 +868,7 @@ export default function IncidentDetailsPage() {
                   type="button"
                   disabled={!selectedEngineerId || assignLoading}
                   onClick={() => handleAssignEngineer(selectedEngineerId)}
-                  className="px-4 py-2 rounded-lg bg-white text-zinc-950 font-semibold shadow-sm hover:bg-zinc-200 transition-colors disabled:opacity-50"
+                  className="px-3.5 py-1.5 rounded bg-terracotta-500 hover:bg-terracotta-600 text-white font-medium transition-colors disabled:opacity-50"
                 >
                   {assignLoading ? 'Assigning...' : 'Assign Lead'}
                 </button>
@@ -890,4 +880,5 @@ export default function IncidentDetailsPage() {
     </div>
   );
 }
+
 

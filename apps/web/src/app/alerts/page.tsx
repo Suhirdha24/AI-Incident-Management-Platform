@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { fetchApi } from '@/lib/api';
-import { AlertTriangle, Bell, CheckCircle2, ShieldCheck } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AlertsPage() {
@@ -38,43 +37,43 @@ export default function AlertsPage() {
   };
 
   return (
-    <div className="space-y-6 pb-12">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Alert Intelligence</h1>
-        <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+    <div className="space-y-6 pb-12 p-6 max-w-[1600px] mx-auto">
+      <div className="border-b border-neutral-200 dark:border-neutral-800 pb-5">
+        <h1 className="text-xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100">Alert Intelligence</h1>
+        <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
           Real-time telemetry metric threshold alerts correlated into production incident groups.
         </p>
       </div>
 
       {/* STATS ROW */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">ACTIVE ALERTS</span>
-          <p className="text-2xl font-black text-amber-500 mt-1">{alerts.filter(a => a.status === 'TRIGGERED').length}</p>
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div className="p-4 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800">
+          <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-neutral-400">ACTIVE ALERTS</span>
+          <p className="text-2xl font-bold text-amber-500 mt-1">{alerts.filter(a => a.status === 'TRIGGERED').length}</p>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">CRITICAL SEVERITY</span>
-          <p className="text-2xl font-black text-red-500 mt-1">{alerts.filter(a => a.severity === 'CRITICAL').length}</p>
+        <div className="p-4 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800">
+          <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-neutral-400">CRITICAL SEVERITY</span>
+          <p className="text-2xl font-bold text-rose-500 mt-1">{alerts.filter(a => a.severity === 'CRITICAL').length}</p>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">ACKNOWLEDGED</span>
-          <p className="text-2xl font-black text-sky-400 mt-1">{alerts.filter(a => a.status === 'ACKNOWLEDGED').length}</p>
+        <div className="p-4 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800">
+          <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-neutral-400">ACKNOWLEDGED</span>
+          <p className="text-2xl font-bold text-terracotta-500 mt-1">{alerts.filter(a => a.status === 'ACKNOWLEDGED').length}</p>
         </div>
 
-        <div className="p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm">
-          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">RESOLVED</span>
-          <p className="text-2xl font-black text-emerald-500 mt-1">{alerts.filter(a => a.status === 'RESOLVED').length}</p>
+        <div className="p-4 rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800">
+          <span className="text-[10px] font-mono font-semibold uppercase tracking-wider text-neutral-400">RESOLVED</span>
+          <p className="text-2xl font-bold text-emerald-500 mt-1">{alerts.filter(a => a.status === 'RESOLVED').length}</p>
         </div>
       </div>
 
       {/* ALERTS TABLE */}
-      <div className="rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800/80 shadow-sm overflow-hidden">
+      <div className="rounded bg-white dark:bg-[#171717] border border-neutral-200 dark:border-neutral-800 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-100 dark:border-slate-800 text-slate-400 text-[10px] uppercase font-semibold bg-slate-50/50 dark:bg-slate-950/50">
+              <tr className="border-b border-neutral-200 dark:border-neutral-800 text-neutral-400 text-[10px] font-mono uppercase bg-neutral-50 dark:bg-neutral-900/50">
                 <th className="py-3 px-4">Alert ID</th>
                 <th className="py-3 px-4">Service</th>
                 <th className="py-3 px-4">Metric & Breach</th>
@@ -84,26 +83,26 @@ export default function AlertsPage() {
                 <th className="py-3 px-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
+            <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800">
               {alerts.map(a => (
-                <tr key={a._id} className="hover:bg-slate-50 dark:hover:bg-slate-800/40">
-                  <td className="py-3.5 px-4 font-mono font-bold text-sky-400">{a.alertId}</td>
-                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-white">{a.serviceKey || 'payment-api'}</td>
+                <tr key={a._id} className="hover:bg-neutral-50 dark:hover:bg-neutral-900/50 transition-colors">
+                  <td className="py-3.5 px-4 font-mono font-semibold text-terracotta-500">{a.alertId}</td>
+                  <td className="py-3.5 px-4 font-medium text-neutral-900 dark:text-neutral-100">{a.serviceKey || 'payment-api'}</td>
                   <td className="py-3.5 px-4">
-                    <span className="font-semibold text-slate-900 dark:text-white block">{a.metric}</span>
-                    <span className="text-[10px] text-slate-400">Value: {a.value} (Threshold: {a.threshold})</span>
+                    <span className="font-medium text-neutral-900 dark:text-neutral-100 block">{a.metric}</span>
+                    <span className="text-[10px] text-neutral-400 font-mono">Value: {a.value} (Threshold: {a.threshold})</span>
                   </td>
                   <td className="py-3.5 px-4">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      a.severity === 'CRITICAL' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 'bg-orange-500/10 text-orange-500 border border-orange-500/20'
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold border ${
+                      a.severity === 'CRITICAL' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 'bg-orange-500/10 text-orange-400 border-orange-500/20'
                     }`}>
                       {a.severity}
                     </span>
                   </td>
-                  <td className="py-3.5 px-4 text-slate-400 font-mono text-[11px]">{a.source || 'Datadog'}</td>
+                  <td className="py-3.5 px-4 text-neutral-400 font-mono text-[11px]">{a.source || 'Datadog'}</td>
                   <td className="py-3.5 px-4">
-                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                      a.status === 'TRIGGERED' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold border ${
+                      a.status === 'TRIGGERED' ? 'bg-rose-500/10 text-rose-400 border-rose-500/20' : 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
                     }`}>
                       {a.status}
                     </span>
@@ -112,7 +111,7 @@ export default function AlertsPage() {
                     {a.status === 'TRIGGERED' && (
                       <button
                         onClick={() => handleUpdateStatus(a._id, 'ACKNOWLEDGED')}
-                        className="px-2.5 py-1 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-[11px] hover:bg-slate-200 dark:hover:bg-slate-700"
+                        className="px-2.5 py-1 rounded bg-neutral-100 dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 font-medium text-[11px] border border-neutral-200 dark:border-neutral-800 hover:bg-neutral-200"
                       >
                         Acknowledge
                       </button>
@@ -120,7 +119,7 @@ export default function AlertsPage() {
                     {a.status !== 'RESOLVED' && (
                       <button
                         onClick={() => handleUpdateStatus(a._id, 'RESOLVED')}
-                        className="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold text-[11px] hover:bg-emerald-500/20"
+                        className="px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium text-[11px] hover:bg-emerald-500/20"
                       >
                         Resolve
                       </button>
@@ -135,3 +134,4 @@ export default function AlertsPage() {
     </div>
   );
 }
+

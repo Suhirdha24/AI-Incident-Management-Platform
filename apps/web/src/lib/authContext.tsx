@@ -19,6 +19,7 @@ interface AuthContextType {
   loading: boolean;
   theme: 'dark' | 'light';
   login: (email: string, pass: string) => Promise<void>;
+  register: (name: string, email: string, pass: string, role?: UserRole) => Promise<void>;
   demoLogin: (role: UserRole) => Promise<void>;
   logout: () => void;
   toggleTheme: () => void;
@@ -64,7 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!loading && !user && pathname !== '/login') {
+    if (!loading && !user && pathname !== '/login' && pathname !== '/register') {
       router.push('/login');
     }
   }, [loading, user, pathname, router]);
@@ -84,6 +85,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const data = await fetchApi<{ token: string; user: User }>('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password: pass })
+    });
+    localStorage.setItem('opsai_token', data.token);
+    setToken(data.token);
+    setUser(data.user);
+    router.push('/dashboard');
+  };
+
+  const register = async (name: string, email: string, pass: string, role: UserRole = UserRole.ENGINEER) => {
+    const data = await fetchApi<{ token: string; user: User }>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify({ name, email, password: pass, role })
     });
     localStorage.setItem('opsai_token', data.token);
     setToken(data.token);
@@ -111,11 +123,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, theme, login, demoLogin, logout, toggleTheme }}>
+    <AuthContext.Provider value={{ user, token, loading, theme, login, register, demoLogin, logout, toggleTheme }}>
       {children}
     </AuthContext.Provider>
   );
 }
+
 
 export function useAuth() {
   const context = useContext(AuthContext);

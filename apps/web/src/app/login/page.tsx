@@ -155,10 +155,27 @@ export default function LoginPage() {
             <span className="font-semibold text-base text-neutral-100 tracking-tight">OpsAI</span>
           </div>
 
+          {/* TAB HEADER */}
+          <div className="flex rounded bg-neutral-900 border border-neutral-800 p-1">
+            <button
+              type="button"
+              className="flex-1 py-1.5 text-center text-xs font-medium rounded bg-neutral-800 text-white shadow-sm"
+            >
+              Sign In
+            </button>
+            <a
+              href="/register"
+              className="flex-1 py-1.5 text-center text-xs font-medium rounded text-neutral-400 hover:text-neutral-200 transition-colors"
+            >
+              Create Account
+            </a>
+          </div>
+
           <div>
             <h2 className="text-xl font-semibold text-neutral-100 tracking-tight">Sign in to Operations Console</h2>
             <p className="text-xs text-neutral-400 mt-1">Enter your credentials or choose a 1-click role to explore.</p>
           </div>
+
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
@@ -210,6 +227,14 @@ export default function LoginPage() {
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </form>
+
+          <p className="text-xs text-center text-neutral-400">
+            Don't have an account?{' '}
+            <a href="/register" className="text-terracotta-500 hover:underline font-medium">
+              Create Account
+            </a>
+          </p>
+
 
           {/* DEMO ACCOUNTS ACCELERATOR */}
           <div className="pt-6 border-t border-neutral-800 space-y-3">

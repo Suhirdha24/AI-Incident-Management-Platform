@@ -1,7 +1,9 @@
 # OpsAI — AI-Powered Incident Intelligence Platform
 
 > **Resolve incidents faster with intelligent investigation.**  
-> Production-grade full-stack incident management platform designed for Engineering, SRE, and DevOps teams.
+> Production-grade full-stack incident management platform designed for Engineering, SRE, and DevOps teams.  
+>  
+> 🌐 **Live Production Deployment**: [https://ai-incident-management-platform.onrender.com/login](https://ai-incident-management-platform.onrender.com/login)
 
 ---
 
@@ -92,7 +94,7 @@ The application services will be accessible at:
 
 ## 🧪 Demo Presentation Flow
 
-1. Open **[http://localhost:3000/login](http://localhost:3000/login)**.
+1. Open **[https://ai-incident-management-platform.onrender.com/login](https://ai-incident-management-platform.onrender.com/login)** (or local [http://localhost:3000/login](http://localhost:3000/login)).
 2. Click **`[Login as Engineer]`** (Vishal).
 3. Review the **Executive Dashboard**: observe MTTR (42m), MTTA (7m), and the AI Operations Insight card highlighting database pool saturation.
 4. Click on featured incident **`INC-2026-0192`** (*Payment API elevated error rate*).

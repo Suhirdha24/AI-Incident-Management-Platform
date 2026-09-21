@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata = {
-  title: 'IncidentPulse AI — AI-Powered Incident Intelligence',
+  title: 'OpsAI — Incident Management Platform',
   description: 'Production Incident Management Platform for Engineering & DevOps teams'
 };
 
